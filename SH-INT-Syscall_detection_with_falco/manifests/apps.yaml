@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-a
+  namespace: team-green
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-a
+  template:
+    metadata:
+      labels:
+        app: app-a
+    spec:
+      containers:
+      - name: app
+        image: debian:bookworm-slim
+        command: [ "sh", "-c" ]
+        args:
+          - while true; do echo "Hello from app-a"; sleep 15; done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-b
+  namespace: team-blue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-b
+  template:
+    metadata:
+      labels:
+        app: app-b
+    spec:
+      nodeSelector:
+        node: node01
+      containers:
+      - name: app
+        image: debian:bookworm-slim
+        command: [ "sh", "-c" ]
+        args:
+          - |
+            apt update && apt install -y procps > /dev/null
+            sleep 20
+            while true; do
+              echo "Trying to modify shadow..."
+              cat /etc/shadow
+              sleep 10
+            done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-c
+  namespace: team-red
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-c
+  template:
+    metadata:
+      labels:
+        app: app-c
+    spec:
+      nodeSelector:
+        node: controlplane
+      containers:
+      - name: app
+        image: debian:bookworm-slim
+        command: [ "sh", "-c" ]
+        args:
+          - |
+            while true; do
+              echo "Installing net-tools..."
+              apt update > /dev/null && apt install -y net-tools > /dev/null || true
+              sleep 10
+            done

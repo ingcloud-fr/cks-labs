@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-b
+  namespace: team-red
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-b
+  template:
+    metadata:
+      labels:
+        app: app-b
+    spec:
+      containers:
+      - name: app
+        image: busybox
+        command: ["sh", "-c", "while true; do echo hello from app-b; sleep 10; done"]

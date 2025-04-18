@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: restricted
+  namespace: team-red
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pod-access
+  namespace: team-red
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/exec"]
+  verbs: ["get", "list", "watch", "create", "delete"]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: restrict-binding
+  namespace: team-red
+subjects:
+- kind: ServiceAccount
+  name: restricted
+  namespace: team-red
+roleRef:
+  kind: Role
+  name: pod-access
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: restricted-user-secret
+  annotations:
+    kubernetes.io/service-account.name: restricted
+  namespace: team-red
+type: kubernetes.io/service-account-token

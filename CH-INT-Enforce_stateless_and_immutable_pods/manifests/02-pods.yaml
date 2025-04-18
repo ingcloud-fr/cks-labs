@@ -1,0 +1,141 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: production
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: nginx
+          securityContext:
+            privileged: true
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: production
+data:
+  app.conf: |
+    key=value
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend-configmap
+  namespace: production
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      volumeMounts:
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+  volumes:
+    - name: config
+      configMap:
+        name: app-config
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend-emptydir
+  namespace: production
+spec:
+  containers:
+    - name: frontend
+      image: nginx
+      volumeMounts:
+        - name: data
+          mountPath: /data
+  volumes:
+    - name: data
+      emptyDir: {}
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cache
+  namespace: production
+spec:
+  containers:
+    - name: redis
+      image: redis
+      securityContext:
+        readOnlyRootFilesystem: true
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reports
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reports
+  template:
+    metadata:
+      labels:
+        app: reports
+    spec:
+      containers:
+        - name: reports
+          image: busybox
+          command: ["sleep", "3600"]
+          volumeMounts:
+            - name: temp-storage
+              mountPath: /data
+              readOnly: true
+      volumes:
+        - name: temp-storage
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine-root
+  namespace: production
+spec:
+  securityContext:
+    runAsUser: 0
+  containers:
+    - name: app
+      image: alpine
+      command: ["sleep", "3600"]

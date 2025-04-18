@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod3
+  namespace: team-red
+spec:
+  serviceAccountName: pod-sa
+  automountServiceAccountToken: true
+  containers:
+  - name: c3
+    image: curlimages/curl
+    command: ["sleep", "3600"]
