@@ -22,15 +22,9 @@ $ cd ..
 $ ./vcluster up
 ```
 
-Add the labs :
-
-```
-$ git clone https://github.com/ingcloud-fr/cks-labs.git
-```
-
 ## 🧪 Install the labs 
 
-Install the labs in directory (normally, you are in)
+Install the labs in the `vagrant-virtualbox-kubernetes` directory (normally, you are in)
 
 ```
 $ git clone git@github.com:ingcloud-fr/cks-labs.git
@@ -39,7 +33,7 @@ $ git clone git@github.com:ingcloud-fr/cks-labs.git
 Connect to the controlplan :
 
 ```
-./vcluster k8s-controlplan
+./vcluster k8s-controlplane
 ```
 Go to the labs throught the shared directory `/vagrant` ::
 
@@ -47,7 +41,7 @@ Go to the labs throught the shared directory `/vagrant` ::
 $ cd /vagrant/cks-labs
 ```
 
-And launch one :
+And choose one and launch it :
 
 ```
 $ cd CH-ADV-Fix_kube_bench_failures
