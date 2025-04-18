@@ -28,13 +28,20 @@ Add the labs :
 $ git clone https://github.com/ingcloud-fr/cks-labs.git
 ```
 
+## 🧪 Install the labs 
+
+Install the labs in directory (normally, you are in)
+
+```
+$ git clone git@github.com:ingcloud-fr/cks-labs.git
+```
+
 Connect to the controlplan :
 
 ```
 ./vcluster k8s-controlplan
 ```
-
-Go to the labs :
+Go to the labs throught the shared directory `/vagrant` ::
 
 ```
 $ cd /vagrant/cks-labs
@@ -47,9 +54,14 @@ $ cd CH-ADV-Fix_kube_bench_failures
 $ ./deploy.sh
 ```
 
+Notes : 
+- The labs are formatted like this : TOPIC-LEVEL-Title_of_the_lab
+- For the `TOPIC` : `CS` for *Cluster Setup*, `CH` for *Cluster Hardening*, etc (see below)
+- For the LEVEL : `BEG` for *Beginner*, `INT` for *Intermediate*, `ADV` for *Advanced*, `EXP` for *Expert*.
+
 Do the labs and check the solution in `SOLUTION.md`
 
-When you're done, di not forget to reset the lab environment :
+When you're done, do not forget to reset the lab environment :
 
 ```
 $ ./reset.sh
