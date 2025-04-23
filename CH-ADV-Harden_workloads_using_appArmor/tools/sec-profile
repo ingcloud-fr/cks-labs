@@ -1,7 +1,0 @@
-#include <tunables/global>
-profile high-secure flags=(attach_disconnected) {
-  #include <abstractions/base>
-  file,
-  # Deny write access to /tmp (typical test for immutability)
-  deny /tmp/** w,
-}
