@@ -230,6 +230,7 @@ Total: 3 (HIGH: 2, CRITICAL: 1)
 │           │                │          │              │                   │               │ overflow in zipOpenNewFileInZip4_6                          │
 │           │                │          │              │                   │               │ https://avd.aquasec.com/nvd/cve-2023-45853                  │
 └───────────┴────────────────┴──────────┴──────────────┴───────────────────┴───────────────┴─────────────────────────────────────────────────────────────┘
+```
 
 ```
 $ trivy image --severity HIGH,CRITICAL cgr.dev/chainguard/python:latest
@@ -281,20 +282,7 @@ trivy image --format cyclonedx --output sbom.json demo-app:secure
 
 ---
 
-## 🔎 Step 6 – Inspect SBOM Contents
-
-```bash
-cat sbom.json | jq .
-```
-
-📌 Dependencies:
-- Python packages listed
-- System libraries listed
-- No obvious outdated/vulnerable components
-
----
-
-## 🔁 Step 7 – Rescan the Image via SBOM
+## 🔁 Step 6 – Rescan the Image via SBOM
 
 ```
 $ trivy sbom sbom.json
@@ -323,7 +311,7 @@ Legend:
 
 ---
 
-## 📦 Step 8 – Scan the Saved Image Tarball
+## 📦 Step 7 – Scan the Saved Image Tarball
 
 
 We save the image in a tar with Docker :
@@ -356,13 +344,4 @@ Legend:
 ```
 
 📌 Scan from tarball works identically. Safe image confirmed.
-
----
-
-## 🏁 Conclusion
-
-✅ Vulnerabilities reduced from `X` to `Y`  
-✅ Secure base image adopted  
-✅ SBOM generated and verified  
-✅ Best practices applied in image construction
 

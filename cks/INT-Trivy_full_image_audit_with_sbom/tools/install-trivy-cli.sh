@@ -12,12 +12,11 @@ set -e
 # sudo chmod +x /usr/local/bin/trivy
 
 echo "📦 Installing Trivy CLI..."
+[ -f /usr/share/keyrings/trivy.gpg ] && sudo rm -f /usr/share/keyrings/trivy.gpg
 sudo apt-get install -y wget apt-transport-https gnupg lsb-release >/dev/null
-wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo gpg --dearmor -o /usr/share/keyrings/trivy.gpg
+wget -4 -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg >/dev/null
 echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/trivy.list >/dev/null
-sudo apt-get update -y >/dev/null
-sudo apt-get install -y trivy >/dev/null
-
+sudo apt-get update -qq
+DEBIAN_FRONTEND=noninteractive sudo apt-get install -y trivy >/dev/null 2>&1
 
 echo "✅ Trivy installed: $(trivy -v)"
-
