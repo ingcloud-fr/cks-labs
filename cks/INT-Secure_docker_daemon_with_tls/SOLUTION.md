@@ -17,7 +17,17 @@ LISTEN 0      4096               *:2375             *:*    users:(("dockerd",pid
 
 So docker is listening on the unsecure interface on port 2375.
 
-To help, search for tls in docker's documentation : https://docs.docker.com/engine/security/protect-access/
+To help, search for *tls* in docker's documentation : https://docs.docker.com/engine/security/protect-access/
+
+You will find at the end (helps to remember the options)
+
+```
+Daemon modes
+- tlsverify, tlscacert, tlscert, tlskey set: Authenticate clients
+- tls, tlscert, tlskey: Do not authenticate clients
+```
+
+- Note : For TLS without authentication use *tls*, *tlscert*, *tlskey* and set *tlsverify* to **false** !
 
 We try connecting without TLS :
 
@@ -70,7 +80,7 @@ $ docker -H tcp://k8s-controlplane01:2375 run testimage
 Hello from insecure build
 ```
 
-And we can see it, the docker daemon configuration file :
+And we can see it, the docker daemon configuration file `/etc/docker/daemon.json` :
 
 ```
 $ sudo cat /etc/docker/daemon.json
@@ -79,7 +89,7 @@ $ sudo cat /etc/docker/daemon.json
 }
 ```
 
-### 2. 🔐 Activate TLS
+### 2. 🔐 Activate TLS (without authentication)
 
 Make sure the directory `/etc/docker/certs/` contains all necessary certs :
 
@@ -88,7 +98,7 @@ $ ls  /etc/docker/certs/
 ca-key.pem  ca.pem  cert.pem  key.pem
 ```
 
-First we have to set up TLS only (no authentification).
+First, we have to set up TLS only (no authentification) on the secure port (2376)
 
 We edit `/etc/docker/daemon.json`:
 
@@ -183,7 +193,7 @@ $ curl -k https://localhost:2376/version
 curl: (56) OpenSSL SSL_read: error:0A00045C:SSL routines::tlsv13 alert certificate required, errno 0
 ```
 
-Do now Docker asks for authentication !
+Now Docker asks for authentication !
 
 If we want to test the Docker mTLS connection (mutaul authentification), the client must have its own certificats to connect to Docker.
 
@@ -240,6 +250,8 @@ Just do some theory !
 
 We already have a CA (`ca.pem` and `ca-key.pem` in `/etc/docker/certs/` ), here's how to generate the client certificate:
 
+- Note: the entire process is in docker documentation https://docs.docker.com/engine/security/protect-access/ 
+
 - Step 1: Create a private key for the client
 
 ```
@@ -291,7 +303,9 @@ $ sudo docker --tlsverify \
 The response is :
 
 ```
-$ sudo docker --tlsverify   --tlscacert=/etc/docker/certs/ca.pem   --tlscert=client-cert.pem   --tlskey=client-key.pem   -H tcp://localhost:2376 info
+$ sudo docker --tlsverify --tlscacert=/etc/docker/certs/ca.pem --tlscert=client-cert.pem \
+  --tlskey=client-key.pem -H tcp://localhost:2376 info
+  
 Client: Docker Engine - Community
  Version:    28.1.1
  Context:    default

@@ -32,12 +32,12 @@ EOF
   sudo chmod 0444 $CERTS_DIR/ca.pem $CERTS_DIR/cert.pem
 fi
 
-echo "⚙️ Configuring Docker daemon ..."
+echo "⚙️  Configuring Docker daemon ..."
 
-# Backup config existante si besoin
+# Backup config existante
 sudo cp /lib/systemd/system/docker.service /lib/systemd/system/docker.service.bak
 
-# On modifie /lib/systemd/system/docker.service
+# On modifie /lib/systemd/system/docker.service (suppression de -H fd://)
 sudo sed -i 's|-H fd://||' /lib/systemd/system/docker.service
 
 # Copier les certs
