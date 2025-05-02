@@ -1,16 +1,14 @@
 #!/bin/bash
 set -e
 
-echo "🔧 Creating namespaces..."
-kubectl apply -f manifests/namespaces.yaml > /dev/null
-
-echo "🚀 Deploying applications..."
-kubectl apply -f manifests/apps.yaml > /dev/null
+echo "🚀 Deploying manifest..."
+kubectl apply -f manifests/ > /dev/null
 
 SSH_OPTIONS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR"
-CLUSTER=$(kubectl get nodes -oname | awk -F/ '{print $2}' | awk -F- '{print $1}' | uniq)
-kubectl label nodes $CLUSTER-node01 node=node01
-kubectl label nodes $CLUSTER-controlplane node=controlplane
+CONTROLPLANE=$(kubectl get nodes -oname | grep controlplane | awk -F/ '{print $2}')
+NODE=$(kubectl get nodes --no-headers -o wide | grep -v control-plane | awk '{print $1}')
+kubectl label nodes $NODE node=node01
+kubectl label nodes $CONTROLPLANE node=controlplane
 
 sudo cp /etc/falco/falco_rules.local.yaml /etc/falco/falco_rules.local.yaml.SAVE
 
@@ -24,8 +22,8 @@ sudo tee /etc/falco/falco_rules.local.yaml > /dev/null <<'EOF'
   tags: [process, package_mgmt, suspicious]
 EOF
 sudo systemctl restart falco
-scp $SSH_OPTIONS /etc/falco/falco_rules.local.yaml root@$CLUSTER-node01:/etc/falco/
-ssh $SSH_OPTIONS root@$CLUSTER-node01 systemctl restart falco
+scp $SSH_OPTIONS /etc/falco/falco_rules.local.yaml root@$NODE:/etc/falco/
+ssh $SSH_OPTIONS root@$NODE systemctl restart falco
 
 
 echo
