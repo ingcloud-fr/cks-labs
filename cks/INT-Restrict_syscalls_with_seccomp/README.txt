@@ -8,14 +8,14 @@ Apply two different custom seccomp profiles that block dangerous syscalls (`unsh
 
 📌 Your mission:
 
-1. Two profiles are placed under `/home/vagrant/profile/`:
+1. Two profiles are placed under `/home/vagrant/profiles/`:
    - `seccomp-deny-unshare.json`
    - `seccomp-deny-ptrace.json`
 2. Install the 2 seccomp profiles on both `controlplane01` and `node01` (depends on your cluster it might be `k8s-controlplane01` and `k8s-node01`)
 3. Create a pod named `pod-unshare` with image `ubuntu` in the namespace `team-blue` (already created) that:
    - runs the command `unshare --mount --pid --fork --mount-proc bash` and uses the profile `seccomp-deny-unshare.json` that blocks it
    - verify that `unshare` fails due to seccomp
-4. Create another pod named `pod-unshare` with image `ubuntu` that sleep for 1 hour and uses the profile `seccomp-deny-ptrace.json`:
+4. Create another pod named `pod-ptrace` with image `ubuntu` that sleep for 1 hour and uses the profile `seccomp-deny-ptrace.json`:
    - runs a sheel bash in it
    - install the package `strace`
    - verify that `strace ls` fails due to seccomp
