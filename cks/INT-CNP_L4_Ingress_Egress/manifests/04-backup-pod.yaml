@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: backup
+  namespace: team-app
+  labels:
+    role: backup
+spec:
+  containers:
+  - name: client
+    image: wbitt/network-multitool
+    command:
+    - /bin/sh
+    - -c
+    - sleep 3600

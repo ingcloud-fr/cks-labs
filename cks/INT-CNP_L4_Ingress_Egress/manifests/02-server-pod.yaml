@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: server
+  namespace: team-app
+  labels:
+    role: server
+spec:
+  containers:
+  - name: server
+    image: wbitt/network-multitool
+    env:
+      - name: HTTPS_PORT
+        value: "8080"
+      - name: HTTP_PORT  
+        value: "3306"
+    ports:
+    - containerPort: 8080
+    - containerPort: 3306

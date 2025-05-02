@@ -1,6 +1,6 @@
 🛡️ Lab: Escaping Secret Restrictions with Pod Workarounds
 
-🧠 Difficulty: Difficult 
+🧠 Difficulty: Advanced 
 ⏱️ Estimated Time: 20 minutes
 
 🎯 Goal:
@@ -9,14 +9,14 @@ A user with restricted RBAC permissions has somehow managed to access Kubernetes
 📌 Your mission:
 
 - Switch to the provided restricted user context with `kubectl config use-context restricted@infra-prod`
-- Investigate the workloads running in the team-red namespace.
-- Extract the values of the three secrets: secret1, secret2, and secret3 using only what is available to the restricted user.
+- Investigate the workloads running in the `team-red` namespace.
+- Extract the values of the three secrets: `secret1`, `secret2`, and `secret3` using only what is available to the restricted user.
 - Switch back to the kubernetes-admin context when finished with `kubectl config use-context kubernetes-admin@kubernetes`
 
 🧰 Context:
 
-- Namespace team-red contains 3 pods: pod1, pod2, and pod3.
-- The user restricted has no permission to list, get, or describe Secrets or RBAC objects.
+- Namespace `team-red` contains 3 pods: `pod1`, `pod2`, and `pod3`.
+- The user restricted has no permission to `list`, `get`, or describe Secrets or RBAC objects.
 - Secrets are used by the Pods in creative ways: via mounted volumes, environment variables, or API calls via their service account tokens.
 
 ✅ Expected result:

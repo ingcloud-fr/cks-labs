@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: secret-manager
+  name: secret-manager
+  namespace: team-red
+spec:
+  serviceAccountName: secret-sa       # ADD
+  containers:
+  - image: nginx
+    name: secret-manager
+    env:                            # ADD
+      - name: SECRET1               # ADD
+        valueFrom:                  # ADD
+          secretKeyRef:             # ADD
+            name: secret-1          # ADD
+            key: password           # ADD
+    volumeMounts:                   # ADD
+      - name: secret-volume         # ADD
+        mountPath: /etc/my-secret2  # ADD
+        readOnly: true              # ADD
+  volumes:                            # ADD
+    - name: secret-volume             # ADD
+      secret:                         # ADD
+        secretName: secret-2          # ADD 
+

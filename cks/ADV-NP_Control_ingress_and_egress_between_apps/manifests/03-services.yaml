@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: backend
+  name: backend-svc-data
+  namespace: team-green
+spec:
+  ports:
+  - port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: backend
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: backend
+  name: backend-svc-web
+  namespace: team-green
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: backend
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: frontend
+    role: frontend
+  name: frontend-svc-http
+  namespace: team-green
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: frontend
+    role: frontend
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: frontend
+    role: frontend
+  name: frontend-svc-https
+  namespace: team-green
+spec:
+  ports:
+  - port: 443
+    protocol: TCP
+    targetPort: 443
+  selector:
+    app: frontend
+    role: frontend
+  type: ClusterIP

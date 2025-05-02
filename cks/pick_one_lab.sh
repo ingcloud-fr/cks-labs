@@ -23,7 +23,7 @@ fi
 MAX_LEVEL="${1:-EXP}"
 
 # Ordre des niveaux
-LEVELS=("BEG" "INT" "ADV" "EXP")
+LEVELS=("EAS" "INT" "ADV" "EXP")
 
 # Vérifie si le niveau donné est valide
 if [[ ! " ${LEVELS[*]} " =~ " $MAX_LEVEL " ]]; then

@@ -1,3 +1,7 @@
 A-VERIFIER*
 00-*
 labs_ideas*.md
+*.pem
+others/
+*.pid
+local.*

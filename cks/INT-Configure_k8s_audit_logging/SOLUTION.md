@@ -25,27 +25,27 @@ omitStages:
   - "RequestReceived"
 
 rules:
-  # 🟢 Log pod creation and deletion (any namespace)
+  # Log pod creation and deletion (any namespace)
   - level: RequestResponse
     verbs: ["create", "delete"]
     resources:
       - group: ""
         resources: ["pods"]
 
-  # 📄 Log all access to pod logs (any verb)
+  # Log all access to pod logs (any verb)
   - level: Metadata
     resources:
       - group: ""
         resources: ["pods/log"]
 
-  # 🔐 Log modification and deletion of secrets outside kube-system
+  # Log modification and deletion of secrets outside kube-system
   - level: Metadata
     verbs: ["delete","update","patch"]
     resources:
       - group: ""
         resources: ["secrets"]
 
-  # 🧼 Log deletion of configmaps in kube-system
+  # Log deletion of configmaps in kube-system
   - level: Request
     verbs: ["delete"]
     resources:
@@ -54,14 +54,16 @@ rules:
     namespaces:
       - "kube-system"
 
-  # 🛠️ Log modification (update) of deployments in any namespace
+  # Log modification (update) of deployments in team-pink :
   - level: Request
-    verbs: ["update"]
+    verbs: ["update"]   
     resources:
       - group: "apps"
         resources: ["deployments"]
+    namespaces:
+      - "team-pink"
 
-  # 🚫 Do not log access to non-resource URLs (e.g. /api, /version)
+  # Do not log access to non-resource URLs (e.g. /api, /version)
   - level: None
     nonResourceURLs:
       - "/api*"

@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: bind-full-access
+  namespace: observability
+subjects:
+- kind: ServiceAccount
+  name: sa-inspect
+  namespace: observability
+roleRef:
+  kind: Role
+  name: full-access-role
+  apiGroup: rbac.authorization.k8s.io

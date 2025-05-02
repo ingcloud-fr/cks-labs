@@ -1,0 +1,10 @@
+{
+  "kind": "ImageReview",
+  "apiVersion": "imagepolicy.k8s.io/v1alpha1",
+  "spec": {
+    "containers": [
+      { "image": "busybox" }
+    ],
+    "namespace": "default"
+  }
+}

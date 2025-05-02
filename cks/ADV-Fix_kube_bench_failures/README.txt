@@ -1,7 +1,7 @@
 🛡️ Lab: kube-bench - Audit and Hardening of Kubernetes Components
 
 🧠 Difficulty: Advanced
-⏱️ Estimated Time: 30–45 minutes
+⏱️ Estimated Time: 30 minutes
 
 🎯 Objective:
 Use the kube-bench tool to detect and understand security misconfigurations across Kubernetes components, compare results before and after applying deploy.sh, and verify test behavior.

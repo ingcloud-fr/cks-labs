@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: intruder
+  namespace: team-green
+spec:
+  containers:
+    - name: intruder
+      image: byrnedo/alpine-curl
+      command: ["sleep", "3600"]

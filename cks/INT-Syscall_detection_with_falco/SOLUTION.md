@@ -1,4 +1,4 @@
-# Solution
+# ✅ Solution – Syscall detection with Falco
 
 ## On node01
 

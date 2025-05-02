@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: client
+  namespace: team-green
+  labels:
+    app: client
+    role: client
+spec:
+  containers:
+    - name: tester
+      image: byrnedo/alpine-curl
+      command: ["sleep", "3600"]

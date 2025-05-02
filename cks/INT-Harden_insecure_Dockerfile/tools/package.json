@@ -1,0 +1,11 @@
+{
+  "name": "testapp",
+  "version": "1.0.0",
+  "description": "Demo app for Dockerfile security",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "CKS Demo",
+  "license": "MIT"
+}

@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: strict-client
+  namespace: production
+  labels:
+    policy: strict
+spec:
+  containers:
+  - name: multitool
+    image: wbitt/network-multitool
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: open-client
+  namespace: production
+  labels:
+    policy: open
+spec:
+  containers:
+  - name: multitool
+    image: wbitt/network-multitool
+

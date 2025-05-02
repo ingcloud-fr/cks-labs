@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: node-inspector
+  namespace: observability
+spec:
+  serviceAccountName: sa-inspect
+  containers:
+  - name: inspector
+    image: bitnami/kubectl
+    command: ["sleep", "3600"]

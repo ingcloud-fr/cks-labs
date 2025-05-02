@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-a
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-a
+  template:
+    metadata:
+      labels:
+        app: app-a
+    spec:
+      containers:
+      - name: app
+        image: busybox
+        command: ["sh", "-c", "while true; do echo 'App A running'; sleep 30; done"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-b
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-b
+  template:
+    metadata:
+      labels:
+        app: app-b
+    spec:
+      containers:
+      - name: app
+        image: busybox
+        command: ["sh", "-c", "while true; do echo 'App B working'; sleep 30; done"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-c
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-c
+  template:
+    metadata:
+      labels:
+        app: app-c
+    spec:
+      containers:
+      - name: app
+        image: busybox
+        command: ["sh", "-c", "while true; do echo 'App C doing work'; sleep 30; done"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-d
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-d
+  template:
+    metadata:
+      labels:
+        app: app-d
+    spec:
+      nodeSelector:
+        node: node01
+      containers:
+      - name: app
+        image: busybox
+        command: ["sh", "-c", "while true; do kill 666; sleep 10; done"]
