@@ -42,10 +42,7 @@ serviceaccount/project-sa created
 
 In the doc, search for **serviceaccount projected** : https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#launch-a-pod-using-service-account-token-projection
 
-We modify the ~manifest/nginx.yaml according to the documentation :
-
-
-
+We modify the `~manifest/nginx.yaml` according to the documentation :
 
 ```yaml
 apiVersion: apps/v1
@@ -63,20 +60,21 @@ spec:
       labels:
         app: nginx
     spec:
+      serviceAccountName: project-sa
       containers:
       - name: nginx
         image: nginx
-        volumeMounts:
-        - mountPath: /var/run/secrets/projected-sa/
-          name: projected-token-vol
-      volumes:
-      - name: projected-token-vol
-        projected:
+        volumeMounts:         # ADD
+        - mountPath: /var/run/secrets/projected-sa/ # ADD
+          name: projected-token-vol # ADD
+      volumes:                    # ADD
+      - name: projected-token-vol # ADD
+        projected:                # ADD
           sources:
-          - serviceAccountToken:
-              path: token # 👈 The token will appear as a file named 'token' inside the mounted directory
-              expirationSeconds: 7200
-              audience: my-secure-audience
+          - serviceAccountToken:  # ADD
+              path: token         # ADD 👈 The token will appear as a file named 'token' inside the mounted directory
+              expirationSeconds: 7200 # ADD
+              audience: my-secure-audience # ADD
 
 ```
 
@@ -109,11 +107,11 @@ $ TOKEN=$(kubectl exec -n team-blue -it deploy/nginx -- sh -c 'cat /var/run/secr
 command terminated with exit code 1
 
 $ echo $TOKEN
-{"aud":["my-secure-audience"],"exp":1744801122,"iat":1744793922,"iss":"https://kubernetes.default.svc.cluster.local","jti":"d0920eaf-0442-433b-a7eb-d56ba9a062a9","kubernetes.io":{"namespace":"team-blue","node":{"name":"k8s-node01","uid":"bc4bfa84-136d-4d1a-93db-5d5f07c5c21a"},"pod":{"name":"nginx-6654f79fff-85kr7","uid":"ad60676d-2156-4666-b6de-fa675ce5758f"},"serviceaccount":{"name":"default","uid":"1163c599-aec5-4f46-abab-1c4961e64260"}},"nbf":1744793922,"sub":"system:serviceaccount:team-blue:default"}base64: invalid input
+{"aud":["my-secure-audience"],"exp":1746227556,"iat":1746220356,"iss":"https://kubernetes.default.svc.cluster.local","jti":"fda0cf11-26f8-4a6e-b805-4a5fc6d4e457","kubernetes.io":{"namespace":"team-blue","node":{"name":"k8s-node01","uid":"276fb402-b57c-403b-a6de-6482db172c52"},"pod":{"name":"nginx-556fbd85d7-jkbsw","uid":"fa69e99d-accc-4566-b646-9fef7936cdfe"},"serviceaccount":{"name":"project-sa","uid":"e61532ba-6023-4524-9544-2177bc2272c1"}},"nbf":1746220356,"sub":"system:serviceaccount:team-blue:project-sa"}base64: invalid input
 
 ```
 
-We can see the expiration `"exp":1744801122`
+We can see name of the token `team-blue:project-sa` the expiration `"exp":1744801122`
 
 
 ## 💡 Best Practices (Production)

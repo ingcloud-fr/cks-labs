@@ -12,7 +12,7 @@ A pod must use a projected service account token instead of the default one.
    - a custom audience named `my-secure-audience`
    - a short expiration (2 hours = 7200 seconds)
    - a custom mount path `/var/run/secrets/projected-sa`
-3. Verify the content of the projected token inside the pod.
+3. Verify the content of the projected token inside the pod (you may need to replace/delete/create the deployment).
 
 🧰 Context:
 - A namespace `team-blue` is created.
