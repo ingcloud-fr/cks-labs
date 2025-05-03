@@ -2,7 +2,7 @@
 
 🧠 Difficulty: Intermediate  
 🧩 Domain : Cluster Hardening  
-⏱️ Estimated Time: 10–15 minutes
+⏱️  Estimated Time: 10–15 minutes
 
 🎯 Goal:  
 Use Kubernetes Network Policies to restrict ingress traffic between Pods in a namespace, and selectively allow traffic based on labels and ports.
@@ -14,7 +14,7 @@ Use Kubernetes Network Policies to restrict ingress traffic between Pods in a na
    - Communication from Pods outside `team-green` should also be blocked.
 
 2. Verify that:
-   - The `frontend` Pod **cannot** reach the `backend` Pod using `wget`.
+   - The `frontend` Pod **cannot** reach the `backend` Pod using `wget` or `curl`.
    - The test Pod in the `default` namespace **cannot** reach the backend either.
 
 3. Create another NetworkPolicy named `ingress-allow-backend` in the same namespace:

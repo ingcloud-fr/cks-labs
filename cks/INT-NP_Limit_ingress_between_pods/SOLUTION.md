@@ -1,10 +1,10 @@
-## Solution: Limit Ingress Between Pods with NetworkPolicies
+## 🛡️ Solution: Limit Ingress Between Pods with NetworkPolicies
 
 In this lab, we must restrict all ingress traffic in a namespace, then allow communication from specific Pods on a specific port.
 
 ---
 
-### 1. Deny All Ingress Traffic Inside Namespace
+### 1. 🚫 Deny All Ingress Traffic Inside Namespace
 
 Let's have a look on the current situation :
 
@@ -23,7 +23,7 @@ NAME         STATUS   AGE   LABELS
 team-green   Active   18m   kubernetes.io/metadata.name=team-green
 ```
 
-Note : Notice the `labels`
+📌 Notice the `labels`
 
 We can do some tests :
 
@@ -38,10 +38,10 @@ $ k exec -it pod/tester -- curl backend-svc.team-green:3000
 Hello from backend
 ```
 
-We can see that each pod can communicate !
+✅ We can see that each pod can communicate !
 
 
-Create the `ingress-deny` policy:
+🧱  Create the `ingress-deny` policy:
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -55,7 +55,7 @@ spec:
   - Ingress
 ```
 
-> This policy selects all Pods in `team-green` and blocks **all ingress** traffic.
+🔐 This policy selects all Pods in `team-green` and blocks **all ingress** traffic.
 
 We apply it :
 
@@ -64,7 +64,7 @@ $ k apply -f ingress-deny.yaml
 networkpolicy.networking.k8s.io/ingress-deny configured
 ```
 
-### 2. Verify Behavior
+### 2. 🔎 Verify Behavior
 
 We can check :
 
@@ -82,7 +82,7 @@ curl: (28) Connection timed out after 2001 milliseconds
 ✅ The `ingress-deny` rule blocks all ingress traffic, it's just fine !
 
 
-### 3. Allow Ingress from Frontend on Port 3000
+### 3. 🎯 Allow Ingress from Frontend on Port 3000
 
 Create the `metadata-allow` policy:
 ```yaml
@@ -115,9 +115,7 @@ $ k apply -f ingress-allow.yaml
 networkpolicy.networking.k8s.io/ingress-allow-backend configured
 ```
 
-
-### 4. Re-verify Behavior
-
+### 4. 🧪 Re-verify Behavior
 
 ```
 $ k -n team-green exec -it pod/frontend -- curl backend-svc:3000 --max-time 2
@@ -136,10 +134,10 @@ curl: (28) Resolving timed out after 2001 milliseconds
 
 ✅ Only ingress traffic from pod with label `role=frontend` in `team-green` namespace is allowed !
 
-### 🔐 Production Tips
-- Always start with a `default deny` NetworkPolicy in any namespace.
-- Gradually allow traffic only where justified.
-- Document labels clearly: they are critical for policy targeting.
+### 💡 Production Tips
+- 🔐  Always start with a `default deny` NetworkPolicy in any namespace.
+- 🎯  Gradually allow traffic only where justified.
+- 🏷️ Document labels clearly: they are critical for policy targeting.
 
 ---
 
