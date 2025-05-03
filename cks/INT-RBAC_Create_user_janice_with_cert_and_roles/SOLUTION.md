@@ -1,15 +1,26 @@
 ## Solution: Create User Janice with Certificate and Roles
 
-Search for **csr** in the Kubernetes documentation, at the bottom *Read Issue a Certificate for a Kubernetes API Client Using A CertificateSigningRequest* :
+Search for **csr** in the Kubernetes documentation, at the bottom *Read Issue a Certificate for a Kubernetes API Client Using A CertificateSigningRequest* or search for **csr client** in the Kubernetes documentation to get this page :
 
-https://kubernetes.io/docs/tasks/tls/certificate-issue-client-csr/
+- Doc : https://kubernetes.io/docs/tasks/tls/certificate-issue-client-csr/
+
+In this documentation, you will find how to create the private key, create the X.509 CSR, create a Kubernetes CSR abd approve it and **get the user certificate** for the kubeconfig file.
+
+Search for **multiple kubeconfig** in the Kubernetes documentation :
+
+- Doc: https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/
+
+In this documentation, you will find how to create a kubeconfig file : set-cluster, set-credentials, set-context and **use-context** to set the `current-context` in the kubeconfig file.
+
 
 ### 🧰 Step 1 — Generate a private key and CSR for janice
 
 
+We follow : https://kubernetes.io/docs/tasks/tls/certificate-issue-client-csr/
+
 ```bash
 $ openssl genrsa -out janice.key 2048
-$ openssl req -new -key janice.key -out janice.csr -subj "/CN=janice/O=janice-group"
+$ openssl req -new -key janice.key -out janice.csr -subj "/CN=janice/O=developer"
 ```
 
 ### 📄 Step 2 — Create a CertificateSigningRequest manifest
@@ -189,7 +200,6 @@ $ cat janice.kubeconfig | grep current-context
 current-context: ""
 ```
 
-
 Now, we can set the context :
 
 ```
@@ -279,10 +289,7 @@ $ k apply -f janice-binding.yaml
 rolebinding.rbac.authorization.k8s.io/janice-binding created
 ```
 
-
-
 ### ✅ Step 5 — Test Janice's access
-
 
 ```
 $ kubectl --kubeconfig=janice.kubeconfig get pods -n team-green
@@ -293,7 +300,11 @@ Error from server (Forbidden): pods is forbidden: User "janice" cannot create re
 
 $ kubectl --kubeconfig=janice.kubeconfig auth can-i create pods -n team-green
 no
+
+$ kubectl --kubeconfig janice-kubeconfig -n team-green auth can-i list pod
+yes
 ```
+
 Expected:
 - ✅ get/list/watch allowed
 - ❌ create/delete not allowed
