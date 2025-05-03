@@ -1,8 +1,8 @@
 # ✅ Solution – Gatekeeper Mutation
 
-## 🔧 Installation
+## 🔧 OPA Gatekeeper installation
 
-Install OPA Gatekeeper using Helm:
+Install OPA Gatekeeper using Helm (from the installation documentation):
 
 ```bash
 $ helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts
@@ -17,11 +17,9 @@ REVISION: 1
 TEST SUITE: None
 ```
 
----
-
 ## 🏷️ Label Mutation
 
-For the first mutation (labels), we use the `AssignMetadata` kind based on the official example (but for labels instead of annotations and add the namespace):
+For the first mutation (labels), we use the `AssignMetadata` kind based on the official example (but for `labels` instead of `annotations` and we add the namespace in `match` ):
 
 ```yaml
 # mutation1.yaml 
@@ -50,10 +48,11 @@ Check the mutation object:
 ```bash
 $ kubectl -n team-blue get assignmetadata.mutations.gatekeeper.sh 
 NAME                        AGE
-mutation-label-admin-blue   2m
+mutation-label-admin-blue   21s
 ```
 
 Test with a basic pod:
+
 ```bash
 $ kubectl -n team-blue run nginx --image nginx
 pod/nginx created
@@ -75,7 +74,6 @@ metadata:
   ...
 ```
 
----
 
 ## 🔐 SeccompProfile Mutation
 
@@ -174,17 +172,46 @@ spec:
 
 ---
 
-## 🧹 Cleanup
+## 🔍 How OPA Gatekeeper Integrates with the Kubernetes API Server
 
-Uninstall Gatekeeper:
-```bash
-$ helm list -n gatekeeper-system
-$ helm uninstall gatekeeper -n gatekeeper-system
-release "gatekeeper" uninstalled
-```
+Open Policy Agent (OPA) Gatekeeper is a **policy controller** for Kubernetes that enforces fine-grained rules using **Rego policies**. It integrates directly with the Kubernetes control plane by leveraging built-in **admission webhooks**.
 
-We can reset the lab :
+### 🕉 Kubernetes Admission Webhooks
 
-```
-$ ./reset.sh
-```
+Kubernetes includes two types of admission controller webhooks (*admission plugins*), in this order :
+
+- **1. MutatingAdmissionWebhook** – runs before validation, used to **modify** the request (e.g., inject labels, add defaults).
+- **2. ValidatingAdmissionWebhook** – runs after built-in admission controllers, used to **accept or reject** a request.
+
+These webhooks are **enabled by default** in most Kubernetes distributions.
+
+### 🔗 How Gatekeeper Hooks into the API Server
+
+OPA Gatekeeper registers itself as both:
+
+- A **ValidatingAdmissionWebhook** – to enforce constraints (deny deployments, pods, etc., that violate policy)
+- Optionally, a **MutatingAdmissionWebhook** – to apply mutations via mutation policies (e.g., inject security settings)
+
+Once installed, every resource request (like `kubectl apply`, `create`, `update`) is intercepted by the API Server and passed to Gatekeeper for evaluation.
+
+### ⚙️ How It Works
+
+1. A user applies a resource (e.g., a Pod).
+2. The API server sends this request to all registered webhooks.
+3. Gatekeeper evaluates the request against all installed **Constraints** and **Templates**.
+4. If a rule is violated, Gatekeeper **rejects** the request with a clear error message.
+5. If mutation is enabled and applicable, Gatekeeper can **modify** the request before it is persisted.
+
+### 🛠️ Core Concepts
+
+- **ConstraintTemplate**: Defines a policy logic using Rego.
+- **Constraint**: Applies that logic to specific Kubernetes resources.
+- **Audit**: Gatekeeper can also periodically **scan existing resources** to find violations, not just block new ones.
+
+### 📘 Example Use Cases
+
+- Require all Pods to have specific labels.
+- Deny usage of the `:latest` image tag.
+- Enforce non-root containers only.
+- Disallow hostPath volumes.
+

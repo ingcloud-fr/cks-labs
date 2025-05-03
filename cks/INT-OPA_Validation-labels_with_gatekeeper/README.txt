@@ -20,7 +20,7 @@ Learn how to use OPA Gatekeeper's validation capabilities to reject Pods at crea
 🧰 Context:
 - Two namespaces are pre-created: `team-blue` and `team-green`.
 - You are free to use any minimal Pod spec to test the behavior (ie `kubectl run`).
-- Gatekeeper must be installed and configured by you using Helm.
+- Gatekeeper must be installed and configured by yourself using Helm.
 
 ✅ Expected result:
 - A pod without label `env` created in `team-blue` is automatically rejected.
