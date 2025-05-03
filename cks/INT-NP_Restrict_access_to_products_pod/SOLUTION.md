@@ -51,7 +51,9 @@ spec:
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: team-qa
+    # OR (there is a -)
     - namespaceSelector: {}
+      # AND (there is no -)
       podSelector:
         matchLabels:
           env: staging

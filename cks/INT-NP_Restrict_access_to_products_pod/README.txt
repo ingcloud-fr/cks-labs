@@ -5,7 +5,7 @@
 ⏱️ Estimated Time: 10–15 minutes
 
 🎯 Goal:  
-Create a NetworkPolicy named `pod-restriction` to restrict ingress access to the Pod `products-pod` running in the namespace `development`.
+Create a NetworkPolicy named `pod-restriction` to restrict ingress access to the Pod `products-pod` running in the namespace `development` (L3 no port restriction).
 
 Only allow connections from:
 - Pods located in the namespace `team-qa`
