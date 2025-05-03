@@ -24,7 +24,7 @@ You must create a Kubernetes user named `janice`, configure certificate-based au
 - `janice` can get/list/watch pods in `janice-space`
 - Any other action (e.g. create/delete) or access to other resources should be denied
 
-📁 You can use a separate kubeconfig (`janice.kubeconfig`) and test it like so:
+📁 You must use a separate kubeconfig (`janice.kubeconfig`) and test it like so:
 
 kubectl --kubeconfig=janice.kubeconfig get pods -n janice-space
 kubectl --kubeconfig=janice.kubeconfig auth can-i delete pods -n janice-space
