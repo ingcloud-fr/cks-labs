@@ -19,6 +19,10 @@ spec:
           securityContext:
             allowPrivilegeEscalation: true
             privileged: true
+            capabilities:
+              add:
+                - SETPCAP
+                - SYS_ADMIN
           volumeMounts:
             - name: hostvol
               mountPath: /mnt/host

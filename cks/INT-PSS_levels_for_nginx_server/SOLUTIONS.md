@@ -22,18 +22,15 @@ NAME              STATUS   AGE     LABELS
 team-green        Active   11m   kubernetes.io/metadata.name=team-green,pod-security.kubernetes.io/warn=baseline
 ```
 
-We delete and re-apply the deployment :
+We restart the deployment :
 
 ```
-$ k -n team-green delete deploy/nginx 
-deployment.apps "nginx" deleted
-
-$ k apply -f manifests/nginx-green.yaml 
-Warning: would violate PodSecurity "baseline:latest": hostPath volumes (volume "hostvol"), privileged (container "nginx" must not set securityContext.privileged=true)
-deployment.apps/nginx created
+$ $ k -n team-green rollout restart deployment nginx 
+Warning: would violate PodSecurity "baseline:latest": non-default capabilities (container "nginx" must not include "SYS_ADMIN" in securityContext.capabilities.add), hostPath volumes (volume "hostvol"), privileged (container "nginx" must not set securityContext.privileged=true)
+deployment.apps/nginx restarted
 ```
 
-✅ No changes to the deployment are required.
+✅ No changes to the deployment are required, this is just a warning.
 
 ### 💡 Expected behavior:
 Since this level is applied in **warn** mode only:
@@ -47,7 +44,7 @@ Apply the label to enforce the Pod Security Standard baseline profile:
 ```bash
 $ k label ns team-orange pod-security.kubernetes.io/enforce=baseline
 Warning: existing pods in namespace "team-orange" violate the new PodSecurity enforce level "baseline:latest"
-Warning: nginx-78dd4fd545-x8f4r: hostPath volumes, privileged
+Warning: nginx-78fccb7f86-9687p: non-default capabilities, hostPath volumes, privileged
 namespace/team-orange labeled
 ```
 
@@ -79,6 +76,14 @@ NAME                               DESIRED   CURRENT   READY   AGE
 replicaset.apps/nginx-78dd4fd545   1         0         0       50s
 ```
 
+We can see in events :
+
+```
+$ k -n team-orange get events
+LAST SEEN   TYPE      REASON              OBJECT                        MESSAGE
+80s         Warning   FailedCreate        replicaset/nginx-5b9d4f7fc7   Error creating: pods "nginx-5b9d4f7fc7-866tv" is forbidden: violates PodSecurity "baseline:latest": non-default capabilities (container "nginx" must not include "SYS_ADMIN" in securityContext.capabilities.add), hostPath volumes (volume "hostvol"), privileged (container "nginx" must not set securityContext.privileged=true)
+...
+```
 
 ### The new manifest
 
@@ -104,6 +109,10 @@ spec:
           securityContext:
             allowPrivilegeEscalation: true # We can leave it (the minimum changes is asked) because nginx runs on UID 101
             privileged: false # CHANGE 
+            capabilities:
+              add:
+                - SETPCAP
+              #  - SYS_ADMIN    
       #     volumeMounts:
       #       - name: hostvol
       #         mountPath: /mnt/host
@@ -178,11 +187,10 @@ pod "nginx-baseline" deleted
 ### 🔍 Objective:
 Apply the label:
 ```bash
-$ kubectl label ns team-red pod-security.kubernetes.io/enforce=restricted
+$ k label ns team-red pod-security.kubernetes.io/enforce=restricted
 Warning: existing pods in namespace "team-red" violate the new PodSecurity enforce level "restricted:latest"
-Warning: nginx-78dd4fd545-ndh4f: privileged, allowPrivilegeEscalation != false, unrestricted capabilities, restricted volume types, runAsNonRoot != true, seccompProfile
+Warning: nginx-78fccb7f86-9qpwv: privileged, allowPrivilegeEscalation != false, unrestricted capabilities, restricted volume types, runAsNonRoot != true, seccompProfile
 namespace/team-red labeled
-
 ```
 
 ### 🧪 What fails and why?
