@@ -38,8 +38,10 @@ $ k -n team-blue exec -it pod/client-without-access -- curl api.team-orange:80
 ...
 ```
 
+Let's create a NetworkPolicy :
+
 ```yaml
-allow-across-team.yaml
+# allow-across-team.yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -62,6 +64,13 @@ spec:
       port: 80
 ```
 
+We aply it :
+
+```
+$ k apply -f allow-across-team.yaml 
+networkpolicy.networking.k8s.io/allow-across-team created
+```
+
 ### ✅ Explanation
 - Applies to the `api` pod in `team-a` (via `podSelector`)
 - Allows traffic from **any namespace** (`namespaceSelector: {}`)
@@ -82,7 +91,6 @@ $ k -n team-blue exec -it pod/client-with-access -- curl api.team-orange:80 --ma
 $ k -n team-blue exec -it pod/client-without-access -- curl api.team-orange:80 --max-time 2
 curl: (28) Connection timed out after 2002 milliseconds
 ```
-
 
 ### 📚 References
 - [Kubernetes Network Policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
