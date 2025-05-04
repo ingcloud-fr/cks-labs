@@ -9,7 +9,8 @@ Practice upgrading a Kubernetes cluster from version 1.32 to 1.33 with `kubeadm`
 ⚠️ Prerequisites:
 - The cluster use kubeadm
 - This lab assumes your cluster is currently running Kubernetes version **v1.32**.
-- If you used `vcluster` to create this environment, make sure it was launched with `K8S_VERSION=1.32`
+- If you used `vcluster` to create this environment, make sure it was launched with `K8S_VERSION=1.32` or `./vcluster up -n k8s -v 1.32`
+- For training, you can also have 2 controlplanes with : `./vcluster up -n k8s -v 1.32`
 
 📌 Goals:
 - Understand the upgrade steps and their impact.

@@ -3,13 +3,8 @@
 ### 🧠 Objective Recap
 Allow ingress to a pod in `team-a` **only from pods in any namespace** that have the label `access=cross-team`.
 
----
-
-
-
 
 ### 🔐 NetworkPolicy: Allow ingress based on pod label only
-
 
 ```
 $ k get all -n team-orange --show-labels 
@@ -43,27 +38,13 @@ $ k -n team-blue exec -it pod/client-without-access -- curl api.team-orange:80
 ...
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ```yaml
+allow-across-team.yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-cross-label
-  namespace: team-a
+  name: allow-across-team
+  namespace: team-orange
 spec:
   podSelector:
     matchLabels:
@@ -76,9 +57,10 @@ spec:
       podSelector:
         matchLabels:
           access: cross-team
+    ports:
+    - protocol: TCP
+      port: 80
 ```
-
----
 
 ### ✅ Explanation
 - Applies to the `api` pod in `team-a` (via `podSelector`)
@@ -86,7 +68,6 @@ spec:
 - But only if the source pod has `access: cross-team`
 - All other traffic is denied (default deny)
 
----
 
 ### 🧪 Test Commands
 
