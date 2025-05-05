@@ -1,20 +1,19 @@
-🛡️ Lab: Limit Capabilities for a Microservice
+🛡️  Lab: Limit Capabilities for a Microservice
 
 🧠 Difficulty: Intermediate  
-⏱️ Estimated Time: 10 minutes
+⏱️  Estimated Time: 10 minutes
 
-🎯 Goal:  
-Minimize the Linux capabilities available to a container, following the principle of least privilege.
+🎯 Goal: Minimize the Linux capabilities available to a container, following the principle of least privilege.
 
 📌 Your mission:
 
-1. In the namespace `team-blue`, a pod named `webapp` is defined in `/home/vagrant/manifests/webapp.yaml`.
+1. In the namespace `team-blue`, a pod named `webapp` is defined in `~/manifests/webapp.yaml`.
    - It uses an image that starts a Python HTTP server on port 80
    - The current configuration **fails to start** because the container lacks the required Linux capability
 
 2. Your task is to modify the pod manifest to:
-   - Drop **all** capabilities (`capabilities.drop: ["ALL"]`)
-   - Add only `NET_BIND_SERVICE` (`capabilities.add: ["NET_BIND_SERVICE"]`)
+   - Drop **all** capabilities
+   - Add only `NET_BIND_SERVICE`
    - Run as `root` (user ID 0), because binding to port 80 requires either root or a binary pre-equipped with the right capability (not covered here)
 
 ✅ Expected:
