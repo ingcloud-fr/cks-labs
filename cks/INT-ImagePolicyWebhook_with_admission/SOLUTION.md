@@ -79,7 +79,7 @@ plugins:
         defaultAllow: true
 ```
 
-#### 2. Modify the `kube-apiserver` manifest (usually ):
+#### 2. Modify the `kube-apiserver` manifest :
 
 In `/etc/kubernetes/manifests/kube-apiserver.yaml`, add the following line:
 

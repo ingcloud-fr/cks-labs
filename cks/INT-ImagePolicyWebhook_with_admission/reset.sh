@@ -4,7 +4,7 @@ set -e
 echo "🧹 Cleaning up lab resources ..."
 
 # Delete the webhook namespace (this will remove all resources inside)
-kubectl delete namespace webhook-system --ignore-not-found=true
+kubectl delete namespace webhook-system --ignore-not-found=true > /dev/null
 
 # Clean /etc/hosts entry for webhook-service
 if grep -q "webhook-service.webhook-system.svc" /etc/hosts; then
