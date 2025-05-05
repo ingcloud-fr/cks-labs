@@ -1,7 +1,7 @@
 🛡️  Lab: Enable mTLS with Istio PeerAuthentication
 
 🧠 Difficulty: Intermediate  
-⏱️ Estimated Time: 15–20 minutes  
+⏱️ Estimated Time: 10 minutes  
 🧩 Domain: Minimize Microservice Vulnerabilities
 
 🎯 Goal:  
@@ -22,11 +22,12 @@ Enable mutual TLS (mTLS) authentication between microservices using Istio by con
 🧰 Context
 - ✅ Istio is **already installed**.
 - ✅ The namespace `team-app` already exists.
-- ✅ Three pods are pre-deployed in the `team-white` namespace:
+- ✅ Three pods are pre-deployed in the `team-app` namespace:
   - `httpbin`: a basic web server that listens on port 8080 with service `httpbin-svc`
   - `client`: a pod with sidecar, used to send HTTP requests to `httpbin`
   - `naked`: a pod **without the Istio sidecar**, used to test failure scenarios
-- 📁 The manifests used are stored in `/home/vagrant/manifests/` if you need to redeploy manually.
+- ✅ You can test on /env endpoint : `http://httpbin-svc:8080/env`
+- 📁 The manifests used are stored in `~/manifests/` if you need to redeploy manually.
 
 
 ✅ Expected:

@@ -556,26 +556,6 @@ ADDRESSES     PORT  MATCH                                                   DEST
 > 🧠 Tip: These tools are especially helpful during the exam to quickly validate configuration or debug policy issues.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## 🔎 Troubleshooting Tips
 
 - Check if sidecar is missing:
