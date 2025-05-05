@@ -1,16 +1,19 @@
-🔐 Lab: Isolating a Pod Using gVisor RuntimeClass
+🔐 Lab: Install Gvisor and isolating a Pod
 
-🧠 Difficulty: Intermediate  
-⏱️ Estimated Time: 20–30 minutes
+🧠 Difficulty: Advanced  
+⏱️ Estimated Time: 30 minutes
 
 🎯 Goal:  
 Learn how to isolate container workloads using the gVisor runtime, integrated via `RuntimeClass` and containerd in Kubernetes.
 
 📌 Your mission:
-1. Install gVisor (`runsc`) on all nodes using the official APT method.
+1. Install gVisor (`runsc`) on *all* nodes using the official APT method.
 2. Register the `runsc` runtime in containerd's configuration.
 3. Deploy a RuntimeClass named `gvisor` using the proper handler.
-4. Create a test pod that uses `runtimeClassName: gvisor` and verify it is running with the correct runtime.
+4. Create in the `team-red` namespace a pod called `pod-gvisor` with ubuntu image that uses `runtimeClassName: gvisor` 
+5. Verify it is running with the correct runtime.
+6. In the pod, install `libcap2-bin`
+7. List the capabilities using `capsh`. Is the capability net_raw is active ?
 
 🧰 Context:
 - The gVisor sandbox runtime is used to improve container isolation.

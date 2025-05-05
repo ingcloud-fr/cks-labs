@@ -18,9 +18,9 @@ sudo apt-get update > /dev/null
 [ -f /etc/containerd/config.toml.SAVE ] && sudo mv /etc/containerd/config.toml.SAVE /etc/containerd/config.toml
 sudo systemctl restart containerd
 
-# Installation on node
+# Remove on node
 for node in $(kubectl get nodes --no-headers | grep -v "control-plane" | awk '{print $1}'); do
-  echo "🗑️  Removing Gvisor remotely on $node..."
+  echo "🗑️  Removing Gvisor remotely via SSH on $node..."
   ssh $SSH_OPTIONS vagrant@$node bash <<'EOF'
     set -e
 	sudo apt-get remove --purge -y runsc > /dev/null
