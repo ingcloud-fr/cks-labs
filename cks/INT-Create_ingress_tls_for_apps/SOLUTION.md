@@ -44,7 +44,7 @@ secret-tls   kubernetes.io/tls   2      25s
 - Use annotations for the ingress class (example: `nginx.ingress.kubernetes.io/rewrite-target: /`)
 - Mount the secret as `tls.secretName`
 
-Let's have a look on the services created :
+Let's have a look at the services created :
 
 ```
 $ k get svc -n team-web 
@@ -141,7 +141,6 @@ status:
 
 It's ok, now we can run the command :
 
-
 ```
 $ k -n team-web create ingress my-ingress-tls \
    --rule="www.my-web-site.org/shop*=frontend:80,tls=secret-tls" \
@@ -179,10 +178,9 @@ Events:
   Normal  Sync    16s (x2 over 31s)  nginx-ingress-controller  Scheduled for sync
 ```
 
-
 ## 🧪 How to Test
 
-Ee can see the Ingress Controller :
+We can see the Ingress Controller :
 
 ```
 $ kubectl get svc ingress-nginx-controller -n ingress-nginx
