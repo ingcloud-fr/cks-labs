@@ -2,6 +2,8 @@ A-VERIFIER*
 00-*
 labs_ideas*.md
 *.pem
+*.crt
+*.key
 others/
 *.pid
 local.*
