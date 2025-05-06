@@ -102,9 +102,9 @@ Can re-attest     : true
 From the lab description:
 - Namespace: `team-yellow`
 - Pods:
-  - `secure-api`: backend pod that must be protected
-  - `trusted-client`: should be allowed
-  - `untrusted-client`: should be blocked
+  - `server`: backend pod that must be protected
+  - `client`: should be allowed
+  - `untrusted`: should be blocked
 
 
 ### ✅ Exploration
@@ -136,7 +136,6 @@ service/server   ClusterIP   10.111.91.224   <none>        8080/TCP   5m21s   <n
 ```
 
 We can test :
-
 
 ```
 $ k -n team-yellow exec -it pod/client -- curl -XPOST http://server:8080/anything --max-time 1
@@ -407,7 +406,7 @@ $ k -n team-yellow exec -it pod/client -- curl -XGET http://server:8080/anything
 Access denied
 ```
 
-
+The logs:
 
 ```
 $ hubble observe -n team-yellow --since 3m
@@ -484,8 +483,7 @@ $ k -n team-yellow exec -it pod/client -- curl -XPOST http://server:8080/anythin
 Note : to also allow `/anything/123/` change path to `path: "^/post(/.*)?(\\?.*)?$"`
 
 ## 🔎 Useful References
-- Cilium Authentication Docs: https://docs.cilium.io/en/stable/network/policy/#authentication-based
-- Zero Trust with Cilium: https://docs.cilium.io/en/stable/security/zero-trust/
+- Cilium Authentication Docs: https://docs.cilium.io/en/stable/network/servicemesh/mutual-authentication/mutual-authentication-example/
 
 ## 📄 Tips
 - Authentication-based policies require the Cilium mTLS identity-aware infrastructure.

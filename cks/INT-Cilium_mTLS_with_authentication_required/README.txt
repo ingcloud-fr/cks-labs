@@ -1,18 +1,17 @@
-🛡️ Lab: Enforce Mutual Authentication with Cilium
+🛡️  Lab: Enforce Mutual Authentication with Cilium
 
 🧠 Difficulty: Intermediate  
 🧩 Domain: Minimize Microservice Vulnerabilities  
-⏱️ Estimated Time: 20–25 minutes
+⏱️  Estimated Time: 20–25 minutes
 
-🎯 Goal:  
-Implement a mutual authentication policy between workloads using Cilium's advanced features.
+🎯 Goal: Implement a mutual authentication policy between workloads using Cilium's advanced features.
 
 📌 Your mission:
 1. Explore the communication pattern between `client`, `server`, and `untrusted` Pods in the namespace `team-yellow`.
 2. Write and apply a `CiliumNetworkPolicy` called `enforce-access` that:
    - Applies to the `server` Pod
    - Only allows ingress HTTP traffic from the `client` Pod
-   - With `POST` only method on URL `/anything` (you can test with `POST` and `GET`)
+   - With `POST` only method on URL `/anything` (you can test with curl with `curl -XPOST` and `-XGET`)
    - Enforces mutual authentication (mTLS)
 3. Confirm that:
    - The `client` Pod can access the `server` over HTTP
