@@ -179,6 +179,25 @@ spec:
           path: "/env"
 ```
 
+If we want to allow access from any namespace to `/env` :
+
+```yaml
+  - fromEndpoints:
+    - matchExpressions:
+      - key: "k8s:io.kubernetes.pod.namespace"
+        operator: Exists
+    toPorts:
+    - ports:
+      - port: "8080"
+        protocol: TCP
+      rules:
+        http:
+        - method: "GET"
+          path: "/env"
+```
+
+
+
 We apply :
 
 ```
