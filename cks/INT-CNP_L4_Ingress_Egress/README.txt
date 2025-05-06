@@ -15,6 +15,7 @@ Create 2 CiliumNetworkPolicies :
      - Accept traffic on port 3306 only from Pods labeled `role=backup`.
    - A second named `restrict-l4-egress` that restrict Egress on `backup` Pod:
      - Allow `backup` to access only `server` port 3306.
+     - ... and maybe another one ... just test !
 
 🧰 Context:
 - Namespace `team-app` is created.

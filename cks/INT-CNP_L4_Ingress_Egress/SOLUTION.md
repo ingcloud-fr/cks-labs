@@ -22,7 +22,7 @@ The goal was to apply a single CiliumNetworkPolicy that:
 
 ---
 
-## ✅ First CiliumNetworkPolicy
+## ✅ First CiliumNetworkPolicy (ingress)
 
 
 We have in the `team-app` namespace :
@@ -157,7 +157,7 @@ $ k -n team-app exec -it pod/backup -- curl -k https://server-service:8080 --max
 ❌ curl: (28) Connection timed out after 2000 milliseconds
 ```
 
-## ✅ Second CiliumNetworkPolicy
+## ✅ Second CiliumNetworkPolicy (egress)
 
 Before applying the rule, we can see on backup :
 
@@ -216,7 +216,6 @@ $ k -n team-app exec -it pod/backup -- sh
 curl: (28) Resolving timed out after 2000 milliseconds
 ```
 
-
 It's a resolver issue, we need to allow egress for DNS requests, so we modify the rule.
 
 We have :
@@ -230,6 +229,7 @@ coredns-668d6bf9bc-ql4kh                     1/1     Running   1 (19h ago)    5d
 ...
 ```
 
+The updated rule :
 
 ```yaml
 apiVersion: "cilium.io/v2"
