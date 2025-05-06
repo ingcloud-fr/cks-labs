@@ -54,9 +54,9 @@ rules:
     namespaces:
       - "kube-system"
 
-  # Log modification (update) of deployments in team-pink :
+  # Log modification of deployments in team-pink :
   - level: Request
-    verbs: ["update"]   
+    verbs: ["update","patch"]   
     resources:
       - group: "apps"
         resources: ["deployments"]
@@ -80,7 +80,7 @@ To accurately capture changes to sensitive objects (e.g., Secrets), audit polici
 
 ### 🔹 Step 2: Configure the API server to use this policy
 
-A good practise is to backup your kube-apiserver.yaml :
+A good practise is to backup your `kube-apiserver.yaml` outside the `manifests/` directory :
 
 ```
 $ sudo cp /etc/kubernetes/manifests/kube-apiserver.yaml /tmp

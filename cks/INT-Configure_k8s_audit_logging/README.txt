@@ -15,10 +15,11 @@ Enable audit logging in Kubernetes and verify that specific security-related act
 
 2. Apply an audit policy that logs the following:
    - ✅ Pod creation **and deletion** (any namespace) → `RequestResponse`
-   - ✅ Pod logs access (e.g. `kubectl logs`) → `Metadata` (no specific verb, logs everything)
+   - ✅ Pod logs access (e.g. `kubectl logs`) in any namespace → `Metadata` (no specific verb, logs everything)
    - ✅ Secret modification and deletion (any namespace) → `Metadata`
    - ✅ ConfigMap deletion (in `kube-system`) → `Request`
-   - ✅ Deployment modification (`update`) in `team-pink` → `Request`
+   - ✅ Deployment modification in `team-pink` → `Request`
+   - ❌ Dot not log anything in `RequestReceived` stage 
    - ❌ Requests to `/api*` paths (non-resource URLs) → must **not** be logged
 
 3. For testing, you must manually:
@@ -44,7 +45,5 @@ https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/
    - `delete` of secrets and configmaps (as per policy)
    - Deployment `update`
 - No logs should appear for `/api*` access (filtered by policy)
-
-⚠️  You may use sudo on nodes
 
 🧹 A `reset.sh` script is available to clean the cluster between attempts.
