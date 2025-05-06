@@ -8,7 +8,7 @@ echo "🧹 Cleaning up the lab..."
 # Delete resources using manifest files
 #kubectl delete -f manifests/ --ignore-not-found=true > /dev/null 2>&1
 
-echo "📦 Removing Trivy remotely on controlplane..."
+echo "📦 Removing Trivy on controlplane..."
 sudo apt-get remove --purge -y trivy > /dev/null
 
 [ -f /usr/share/keyrings/trivy.gpg ] && sudo rm /usr/share/keyrings/trivy.gpg

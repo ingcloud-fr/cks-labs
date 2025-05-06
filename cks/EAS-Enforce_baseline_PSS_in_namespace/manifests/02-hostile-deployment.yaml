@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hostile-container
+  namespace: team-blue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: busybox
+          command: ["/bin/sh", "-c", "sleep 3600"]
+          volumeMounts:
+            - name: containerd-socket
+              mountPath: /run/containerd
+      volumes:
+        - name: containerd-socket
+          hostPath:
+            path: /run/containerd
+            type: Directory

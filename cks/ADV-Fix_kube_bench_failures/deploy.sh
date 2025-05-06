@@ -40,7 +40,7 @@ sudo chmod 755 $ETCD_DIR
 sudo sed -i '/--authorization-mode=/d' $MANIFEST_DIR/kube-apiserver.yaml
 sudo sed -i '/- --secure-port=6443/a \    - --authorization-mode=AlwaysAllow' $MANIFEST_DIR/kube-apiserver.yaml
 
-# === Enable profiling on kube-apiserver (1.2.15 must FAIL) ===
+# === Enable profiling on kube-apiserver (1.2.15 must FAIL) - ALREADY set on true ===
 # sudo sed -i '/--profiling/d' $MANIFEST_DIR/kube-apiserver.yaml
 
 # Attente que l'API server redémarre proprement
@@ -53,10 +53,10 @@ done
 # === Disable Client Cert Auth in etcd (2.2 must FAIL) ===
 sudo sed -i 's/client-cert-auth=true/client-cert-auth=false/' /etc/kubernetes/manifests/etcd.yaml
 
-# === Enable profiling on kube-controller-manager (1.3.2 must FAIL) ===
+# === Enable profiling on kube-controller-manager (1.3.2 must FAIL) - ALREADY set on true ===
 # sudo sed -i '/--profiling/d' $MANIFEST_DIR/kube-controller-manager.yaml
 
-# === Enable profiling on kube-scheduler (1.4.1 must FAIL) ===
+# === Enable profiling on kube-scheduler (1.4.1 must FAIL) - ALREADY set on true ===
 # sudo sed -i '/--profiling/d' $MANIFEST_DIR/kube-scheduler.yaml
 
 # === Modify kubelet config map to break 4.2.1 and 4.2.2 ===
