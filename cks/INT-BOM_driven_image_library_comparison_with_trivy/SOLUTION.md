@@ -15,19 +15,9 @@ Based on the following criteria:
 
 ---
 
-## ✅ Step 1: Pull the Images
+## ✅ Step 1: Generate SBOMs with cyclonedx format
 
-```bash
-$ docker pull nginx:1.22-alpine
-$ docker pull nginx:1.19.10-alpine-perl
-$ docker pull cgr.dev/chainguard/nginx:latest
-```
 
-Note: **NOT necessary**, just to see the `docker pull` command. 
-
----
-
-## 📊 Step 2: Generate SBOMs with cyclonedx format
 
 ```bash
 $ trivy image --format cyclonedx -o nginx-1.22-alpine.sbom.json nginx:1.22-alpine
@@ -37,7 +27,7 @@ $ trivy image --format cyclonedx -o nginx-chainguard.sbom.json cgr.dev/chainguar
 
 ---
 
-## 🤐 Step 3: Inspect libexpat and CVE-2018-25032
+## ✅ Step 2: Generate Trivy report from SBOM
 
 Run a scan **from the SBOM** to target only high/critical CVEs:
 
@@ -47,7 +37,7 @@ $ trivy sbom nginx-1.19.10-alpine-perl.sbom.json --severity HIGH,CRITICAL > resu
 $ trivy sbom nginx-chainguard.sbom.json --severity HIGH,CRITICAL > result-chainguard.txt
 ```
 
-You can also search directly:
+You can search directly:
 
 ```
 $ grep -E "libexpat|CVE-2018-25032" result-1.19.txt 
@@ -136,14 +126,11 @@ $ jq '.Results[].Vulnerabilities[]? | select(.VulnerabilityID=="CVE-2018-25032")
 - No presence of `CVE-2018-25032`
 - Chainguard images follow security best practices and are minimal, signed, and updated frequently
 
----
 
 ## 🔗 References
 - [Trivy Documentation](https://aquasecurity.github.io/trivy)
-- [CVE-2018-25032 NVD](https://nvd.nist.gov/vuln/detail/CVE-2018-25032)
 - [Chainguard Images](https://www.chainguard.dev/chainguard-images)
 
----
 
 ## 🔧 Good Practices
 - Prefer distroless, Alpine, or Chainguard images
