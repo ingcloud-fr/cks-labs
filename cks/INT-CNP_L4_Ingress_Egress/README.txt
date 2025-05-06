@@ -21,6 +21,8 @@ Create 2 CiliumNetworkPolicies :
 - Namespace `team-app` is created.
 - Pods use the `wbitt/network-multitool` image for easy connectivity tests.
 - On server, the port 8080 is https, the port 3306 is http (for the tests)
+  - To test 3306 port : `curl http://server-service:3306`
+  - To test 8080 port : `curl -k https://server-service:8080`
 - A Service `server-service` exposes the server Pod internally.
 
 ✅ Expected result:
