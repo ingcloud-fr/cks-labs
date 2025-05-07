@@ -24,7 +24,7 @@ sudo apt-get update -y >/dev/null
 sudo apt-get install -y trivy >/dev/null
 
 for node in $(kubectl get nodes --no-headers | grep -v "control-plane" | awk '{print $1}'); do
-  echo "📦 Installing Trivy remotely on $node..."
+  echo "📦 Installing Trivy CLI remotely on $node..."
   ssh $SSH_OPTIONS vagrant@$node bash <<'EOF'
     [ -f /usr/share/keyrings/trivy.gpg ] && sudo rm /usr/share/keyrings/trivy.gpg
     [ -f /etc/apt/sources.list.d/trivy.list ] && sudo rm /etc/apt/sources.list.d/trivy.list 
