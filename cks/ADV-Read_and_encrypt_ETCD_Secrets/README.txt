@@ -10,15 +10,15 @@ In this lab, you will explore how Kubernetes Secrets and ConfigMaps are stored i
 📌 Your Tasks:
 
 1. Locate and extract the full content of the existing Secret `database-password` from etcd in the Namespace `team-blue`.  
-   → Store the full raw etcd base64 value into `/opt/labs/etcd-secrets`
+   → Store the full raw etcd value of the secret into `/opt/labs/etcd-secrets`
 
 2. Decode the base64 content of the key `"pass"` from this Secret and save the result into:  
    → `/opt/labs/database-password`
 
 3. Configure **encryption at rest** for Secret and ConfigMap resources:  
    → Use an AES-CBC key provider in an `EncryptionConfiguration` file  
-   → Apply it and restart the kube-apiserver  
    → Create a new Secret and a ConfigMap and verify their data is now stored encrypted in etcd
+   → Encrypt the old Secrets and COnfigMaps.
 
 🧰 Context:
 
