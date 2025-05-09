@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 
 echo "🧹 Restoring original manifests and kubelet config..."
 
@@ -40,8 +40,6 @@ if [ -f "$KUBELET_CONFIGMAP_BACKUP" ]; then
   echo "🔄 Restarting kubelet..."
   sudo systemctl restart kubelet > /dev/null
 fi
-
-
 
 # Delete kube-bench
 # sudo rm -f /usr/local/bin/kube-bench > /dev/null 2>&1
