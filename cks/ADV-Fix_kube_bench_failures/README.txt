@@ -8,12 +8,8 @@ Use the kube-bench tool to detect and understand security misconfigurations acro
 
 📌 Instructions:
 
-1. Run kube-bench on the control-plane node.
-   IMPORTANT: Always use the --version option to match your actual Kubernetes version.
-   Example:
-     kube-bench run --version 1.32
-
-2. Focus on the following 15 tests. In the default cluster, 10 of them should FAIL.
+1. Run kube-bench on the cluster.
+2. *FOCUS* on the following 15 tests.
 
 Control Plane - Configuration Files:
 - 1.1.11: Ensure etcd data directory permissions are set to 700 or more restrictive                       
@@ -55,7 +51,7 @@ Modifying `/var/lib/kubelet/config.yaml` directly is NOT persistent and will be 
 📁 Resources:
 - All manifests: /etc/kubernetes/manifests/
 - Backup location: /etc/kubernetes/backup/
-- kube-bench is installed by: tools/install-kube-bench.sh
+- kube-bench is installed on both nodes.
 
 ✅ Goal:
 - Correct the tests in FAIL state

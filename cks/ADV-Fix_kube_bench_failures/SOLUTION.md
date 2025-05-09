@@ -37,21 +37,28 @@ Warning: Kubernetes version was not auto-detected because kubectl could not conn
 ...
 ```
 
-⚠️  We have two warnings that indicates that *kube-bench* cannot auto-detect the kubernetes version (it uses kubectl and kubectl need a kubeconfig file, but root has no kubeconfig file), we will use the `--version` option :
+⚠️  We have two warnings that indicates that *kube-bench* cannot auto-detect the kubernetes version (it uses *kubectl* and *kubectl* need a kubeconfig file, but root has no kubeconfig file), we can use the `--version` option :
 
 ```
 $ kubelet --version
-Kubernetes v1.32.3
+Kubernetes v1.33.0
 ```
 
 Or anything else to get the kubernetes version (`k get nodes -o wide` for instance)
 
 ⚠️  If you don't put the version, it will consider that you're in 1.18 and the report will be different, as the test IDs won't match. The numbering of kube-bench tests depends on the benchmark profile used and the version of Kubernetes targeted.
 
-We can run *kube-bench* for all the tests and look at the asked ones :
+💡 Other solution : pass the kubeconfig file to root :
 
 ```
-$ sudo kube-bench run --version 1.32
+$ sudo KUBECONFIG=/etc/kubernetes/admin.conf kube-bench run
+```
+
+
+So we can run *kube-bench* for all the tests and look at the asked ones :
+
+```
+$ sudo KUBECONFIG=/etc/kubernetes/admin.conf kube-bench run
 [INFO] 1 Control Plane Security Configuration
 ...
 ```
@@ -61,8 +68,12 @@ But it's not easy (and not quick) to read and to retreive the good ones
 A better way for this lab, is to use the number of the tests with `--check` or `-c` options, and we will not dispay the remediations :
 
 ```
-$ sudo kube-bench run --version 1.32 --noremediations -c "1.1.11,1.2.6,1.2.7,1.2.8,1.2.15,1.2.22,1.2.23,1.2.24,1.3.2,1.4.1,2.1,2.2,4.2.1,4.2.2,4.2.11"
-Warning: Kubernetes version was not auto-detected because kubectl could not connect to the Kubernetes server. This may be because the kubeconfig information is missing or has credentials that do not match the server. Assuming default version 1.18
+$ sudo KUBECONFIG=/etc/kubernetes/admin.conf kube-bench run --noremediations -c "1.1.11,1.2.6,1.2.7,1.2.8,1.2.15,1.2.22,1.2.23,1.2.24,1.3.2,1.4.1,2.1,2.2,4.2.1,4.2.2,4.2.11"
+```
+
+We get :
+
+```bash
 [INFO] 1 Control Plane Security Configuration
 [INFO] 1.1 Control Plane Node Configuration Files
 [FAIL] 1.1.11 Ensure that the etcd data directory permissions are set to 700 or more restrictive (Automated)
@@ -106,13 +117,13 @@ Warning: Kubernetes version was not auto-detected because kubectl could not conn
 
 [INFO] 4 Worker Node Security Configuration
 [INFO] 4.2 Kubelet
-[FAIL] 4.2.1 Ensure that the --anonymous-auth argument is set to false (Automated)
-[FAIL] 4.2.2 Ensure that the --authorization-mode argument is not set to AlwaysAllow (Automated)
+[PASS] 4.2.1 Ensure that the --anonymous-auth argument is set to false (Automated)
+[PASS] 4.2.2 Ensure that the --authorization-mode argument is not set to AlwaysAllow (Automated)
 [PASS] 4.2.11 Verify that the RotateKubeletServerCertificate argument is set to true (Manual)
 
 == Summary node ==
-1 checks PASS
-2 checks FAIL
+3 checks PASS
+0 checks FAIL
 0 checks WARN
 0 checks INFO
 
@@ -125,23 +136,44 @@ Warning: Kubernetes version was not auto-detected because kubectl could not conn
 0 checks INFO
 
 == Summary total ==
-10 checks PASS
-5 checks FAIL
+7 checks PASS
+8 checks FAIL
 0 checks WARN
 0 checks INFO
 ```
 
-- Note : A warning is still remaining, but the test IDs seems to match with the lab requirements.
 
-ℹ️ We observe 15 checks evaluated: **10 FAIL**, **5 PASS**. We will focuse on FAILED ones.
+To summarise, we can do :
+
+```
+$ sudo KUBECONFIG=/etc/kubernetes/admin.conf kube-bench run --noremediations -c "1.1.11,1.2.6,1.2.7,1.2.8,1.2.15,1.2.22,1.2.23,1.2.24,1.3.2,1.4.1,2.1,2.2,4.2.1,4.2.2,4.2.11" | grep "\[" | grep -v INFO
+[FAIL] 1.1.11 Ensure that the etcd data directory permissions are set to 700 or more restrictive (Automated)
+[FAIL] 1.2.6 Ensure that the --authorization-mode argument is not set to AlwaysAllow (Automated)
+[FAIL] 1.2.7 Ensure that the --authorization-mode argument includes Node (Automated)
+[FAIL] 1.2.8 Ensure that the --authorization-mode argument includes RBAC (Automated)
+[FAIL] 1.2.15 Ensure that the --profiling argument is set to false (Automated)
+[PASS] 1.2.22 Ensure that the --service-account-key-file argument is set as appropriate (Automated)
+[PASS] 1.2.23 Ensure that the --etcd-certfile and --etcd-keyfile arguments are set as appropriate (Automated)
+[PASS] 1.2.24 Ensure that the --tls-cert-file and --tls-private-key-file arguments are set as appropriate (Automated)
+[FAIL] 1.3.2 Ensure that the --profiling argument is set to false (Automated)
+[FAIL] 1.4.1 Ensure that the --profiling argument is set to false (Automated)
+[PASS] 2.1 Ensure that the --cert-file and --key-file arguments are set as appropriate (Automated)
+[FAIL] 2.2 Ensure that the --client-cert-auth argument is set to true (Automated)
+[PASS] 4.2.1 Ensure that the --anonymous-auth argument is set to false (Automated)
+[PASS] 4.2.2 Ensure that the --authorization-mode argument is not set to AlwaysAllow (Automated)
+[PASS] 4.2.11 Verify that the RotateKubeletServerCertificate argument is set to true (Manual)
+```
+
+
+
+ℹ️ We observe 15 checks evaluated: **11 FAIL**, **4 PASS**. We will focuse on FAILED ones.
 
 ## 🔧 Fixing 1.1.11 - Etcd Directory Permissions on Controlplane
 
 Now we want to see the remediations so we remove `--noremediations` option :
 
 ```
-$ sudo kube-bench run --version 1.32 -c "1.1.11"
-Warning: Kubernetes version was not auto-detected because kubectl could not connect to the Kubernetes server. This may be because the kubeconfig information is missing or has credentials that do not match the server. Assuming default version 1.18
+$ sudo KUBECONFIG=/etc/kubernetes/admin.conf kube-bench run -c "1.1.11"
 [INFO] 1 Control Plane Security Configuration
 [INFO] 1.1 Control Plane Node Configuration Files
 [FAIL] 1.1.11 Ensure that the etcd data directory permissions are set to 700 or more restrictive (Automated)
@@ -154,30 +186,31 @@ chmod 700 /var/lib/etcd
 ...
 ```
 
-We apply 1.1.11 :
+We apply th 1.1.11 remediation :
 
 ```
 $ sudo grep data-dir /etc/kubernetes/manifests/etcd.yaml 
     - --data-dir=/var/lib/etcd
+
+$ sudo chmod 700 /var/lib/etcd
 ```
 
 We test again :
 
 ```
-$ sudo kube-bench run --version 1.32 -c "1.1.11"
-Warning: Kubernetes version was not auto-detected because kubectl could not connect to the Kubernetes server. This may be because the kubeconfig information is missing or has credentials that do not match the server. Assuming default version 1.18
+$ sudo KUBECONFIG=/etc/kubernetes/admin.conf kube-bench run -c "1.1.11"
 [INFO] 1 Control Plane Security Configuration
 [INFO] 1.1 Control Plane Node Configuration Files
 [PASS] 1.1.11 Ensure that the etcd data directory permissions are set to 700 or more restrictive (Automated)
+
 ```
 
 ✅ Test passes.
 
-## 🔧 Fixing API Server Tests: 1.2.6–1.2.8, 1.2.15
+## 🔧 Fixing API Server Tests: 1.2.6, 1.2.7, 1.2.8, 1.2.15
 
 ```
-$ sudo kube-bench run --version 1.32 -c "1.2.6,1.2.7,1.2.8,1.2.15"
-Warning: Kubernetes version was not auto-detected because kubectl could not connect to the Kubernetes server. This may be because the kubeconfig information is missing or has credentials that do not match the server. Assuming default version 1.18
+$ sudo KUBECONFIG=/etc/kubernetes/admin.conf kube-bench run -c "1.2.6,1.2.7,1.2.8,1.2.15"
 [INFO] 1 Control Plane Security Configuration
 [INFO] 1.2 API Server
 [FAIL] 1.2.6 Ensure that the --authorization-mode argument is not set to AlwaysAllow (Automated)
@@ -202,7 +235,10 @@ for example `--authorization-mode=Node,RBAC`.
 1.2.15 Edit the API server pod specification file /etc/kubernetes/manifests/kube-apiserver.yaml
 on the control plane node and set the below parameter.
 --profiling=false
+...
 ```
+
+- Note : The 1.2.6, 1.2.7 and 1.2.8 are the same test.
 
 💡 A good habit is to save the `kube-apiserver.yaml` in case of a misconfiguration, copy it somewhere outside the manifest directory, for instance :
 
@@ -210,7 +246,7 @@ on the control plane node and set the below parameter.
 $ sudo cp /etc/kubernetes/manifests/kube-apiserver.yaml /tmp
 ```
 
-We edit `/etc/kubernetes/manifests/kube-apiserver.yaml`
+We edit with sudo `/etc/kubernetes/manifests/kube-apiserver.yaml`
 
 ```yaml
 ...
@@ -219,7 +255,7 @@ spec:
   - command:
     - kube-apiserver
       ...
-    - --authorization-mode=RBAC # CHANGE AlwaysAllow to Node,RBAC (tests 1.2.6, 1.2.7, 1.2.8)
+    - --authorization-mode=Node,RBAC # CHANGE AlwaysAllow to Node,RBAC (tests 1.2.6, 1.2.7, 1.2.8)
     - --profiling=false # ADD (test 1.2.15)
      ...
 ...
@@ -228,14 +264,14 @@ spec:
 Wait for the *kube-apiserver* to restart, then run *kube-bench* again :
 
 ```
-$ sudo kube-bench run --version 1.32 -c "1.2.6,1.2.7,1.2.8,1.2.15"
-Warning: Kubernetes version was not auto-detected because kubectl could not connect to the Kubernetes server. This may be because the kubeconfig information is missing or has credentials that do not match the server. Assuming default version 1.18
+$ sudo KUBECONFIG=/etc/kubernetes/admin.conf kube-bench run -c "1.2.6,1.2.7,1.2.8,1.2.15"
 [INFO] 1 Control Plane Security Configuration
 [INFO] 1.2 API Server
 [PASS] 1.2.6 Ensure that the --authorization-mode argument is not set to AlwaysAllow (Automated)
 [PASS] 1.2.7 Ensure that the --authorization-mode argument includes Node (Automated)
 [PASS] 1.2.8 Ensure that the --authorization-mode argument includes RBAC (Automated)
 [PASS] 1.2.15 Ensure that the --profiling argument is set to false (Automated)
+...
 ```
 
 ✅ Test passes.
@@ -243,8 +279,7 @@ Warning: Kubernetes version was not auto-detected because kubectl could not conn
 ## 🔧 Fixing Controller Manager: 1.3.2
 
 ```
-$ $ sudo kube-bench run --version 1.32 -c "1.3.2"
-Warning: Kubernetes version was not auto-detected because kubectl could not connect to the Kubernetes server. This may be because the kubeconfig information is missing or has credentials that do not match the server. Assuming default version 1.18
+$ sudo KUBECONFIG=/etc/kubernetes/admin.conf  kube-bench run -c "1.3.2"
 [INFO] 1 Control Plane Security Configuration
 [INFO] 1.3 Controller Manager
 [FAIL] 1.3.2 Ensure that the --profiling argument is set to false (Automated)
@@ -253,6 +288,7 @@ Warning: Kubernetes version was not auto-detected because kubectl could not conn
 1.3.2 Edit the Controller Manager pod specification file /etc/kubernetes/manifests/kube-controller-manager.yaml
 on the control plane node and set the below parameter.
 --profiling=false
+...
 ```
 
 We edit `/etc/kubernetes/manifests/kube-controller-manager.yaml` :
@@ -269,11 +305,11 @@ spec:
 We run again the test :
 
 ```
-$ sudo kube-bench run --version 1.32 -c "1.3.2"
-Warning: Kubernetes version was not auto-detected because kubectl could not connect to the Kubernetes server. This may be because the kubeconfig information is missing or has credentials that do not match the server. Assuming default version 1.18
+$ sudo KUBECONFIG=/etc/kubernetes/admin.conf  kube-bench run -c "1.3.2"
 [INFO] 1 Control Plane Security Configuration
 [INFO] 1.3 Controller Manager
 [PASS] 1.3.2 Ensure that the --profiling argument is set to false (Automated)
+...
 ```
 
 ✅ Test passes.
@@ -282,8 +318,7 @@ Warning: Kubernetes version was not auto-detected because kubectl could not conn
 
 
 ```
-$ sudo kube-bench run --version 1.32 -c "1.4.1"
-Warning: Kubernetes version was not auto-detected because kubectl could not connect to the Kubernetes server. This may be because the kubeconfig information is missing or has credentials that do not match the server. Assuming default version 1.18
+$ sudo KUBECONFIG=/etc/kubernetes/admin.conf  kube-bench run -c "1.4.1"
 [INFO] 1 Control Plane Security Configuration
 [INFO] 1.4 Scheduler
 [FAIL] 1.4.1 Ensure that the --profiling argument is set to false (Automated)
@@ -292,6 +327,7 @@ Warning: Kubernetes version was not auto-detected because kubectl could not conn
 1.4.1 Edit the Scheduler pod specification file /etc/kubernetes/manifests/kube-scheduler.yaml file
 on the control plane node and set the below parameter.
 --profiling=false
+...
 ```
 
 We edit `/etc/kubernetes/manifests/kube-scheduler.yaml`
@@ -308,11 +344,11 @@ spec:
 We run the test again :
 
 ```
-$ sudo kube-bench run --version 1.32 -c "1.4.1"
-Warning: Kubernetes version was not auto-detected because kubectl could not connect to the Kubernetes server. This may be because the kubeconfig information is missing or has credentials that do not match the server. Assuming default version 1.18
+$ sudo KUBECONFIG=/etc/kubernetes/admin.conf  kube-bench run -c "1.4.1"
 [INFO] 1 Control Plane Security Configuration
 [INFO] 1.4 Scheduler
 [PASS] 1.4.1 Ensure that the --profiling argument is set to false (Automated)
+...
 ```
 
 ✅ Test passes.
@@ -320,7 +356,7 @@ Warning: Kubernetes version was not auto-detected because kubectl could not conn
 ## 🔧 Fixing Etcd: 2.2
 
 ```
-$ sudo kube-bench run --version 1.32 -c "2.2"
+$ sudo KUBECONFIG=/etc/kubernetes/admin.conf kube-bench run -c "2.2"
 ...
 [INFO] 2 Etcd Node Configuration
 [INFO] 2 Etcd Node Configuration
@@ -330,6 +366,7 @@ $ sudo kube-bench run --version 1.32 -c "2.2"
 2.2 Edit the etcd pod specification file /etc/kubernetes/manifests/etcd.yaml on the master
 node and set the below parameter.
 --client-cert-auth="true"
+...
 ```
 
 We edit `/etc/kubernetes/manifests/etcd.yaml` :
@@ -344,10 +381,10 @@ spec:
     ....
 ```
 
-We wait a few secondes, and we run *kube-bench* again :
+We wait a few secondes/minuts, and we run *kube-bench* again :
 
 ```
-$ sudo kube-bench run --version 1.32 -c "2.2"
+$ sudo KUBECONFIG=/etc/kubernetes/admin.conf kube-bench run -c "2.2"
 ...
 [INFO] 2 Etcd Node Configuration
 [INFO] 2 Etcd Node Configuration
@@ -359,8 +396,29 @@ $ sudo kube-bench run --version 1.32 -c "2.2"
 ## ⚙️ Fixing Kubelet Tests: 4.2.1 & 4.2.2 (Upgrade-safe)
 
 ```
-$ sudo kube-bench run --version 1.32 -c "4.2.1,4.2.2"
+$ sudo KUBECONFIG=/etc/kubernetes/admin.conf kube-bench run -c "4.2.1,4.2.2"
 ...
+[INFO] 4 Worker Node Security Configuration
+[INFO] 4.2 Kubelet
+[PASS] 4.2.1 Ensure that the --anonymous-auth argument is set to false (Automated)
+[PASS] 4.2.2 Ensure that the --authorization-mode argument is not set to AlwaysAllow (Automated)
+...
+```
+
+All the tests passe !
+
+Hummm, there are kubelet on worker nodes, we'd better to check us.
+
+Let's connection on k8s-node01 :
+
+```
+$ ssh k8s-node01
+```
+
+And launch the test :
+
+```
+$ kube-bench run --targets node -c "4.2.1,4.2.2"
 [INFO] 4 Worker Node Security Configuration
 [INFO] 4.2 Kubelet
 [FAIL] 4.2.1 Ensure that the --anonymous-auth argument is set to false (Automated)
@@ -387,6 +445,8 @@ systemctl daemon-reload
 systemctl restart kubelet.service
 ```
 
+- Note : we run only on node with `--targets node`, and we do not need `KUBECONFIG=/etc/kubernetes/admin.conf`
+
 We can see the config file of kubelet looking for `--config=` in a `ps` :
 
 ```
@@ -395,7 +455,7 @@ root        7277  3.4  4.1 2192912 83164 ?       Ssl  10:21   5:32 /usr/bin/kube
 ```
 
 
-And in `/var/lib/kubelet/config.yaml` :
+And let's have a look on `/var/lib/kubelet/config.yaml` :
 
 ```yaml
 authentication:
@@ -453,7 +513,7 @@ Now the kubelet configmap is modified, we can see in the docs :
 Let's check the help :
 
 ```
-$ kubeadm upgrade node --help
+$ sudo kubeadm upgrade node --help
 Upgrade commands for a node in the cluster
 
 The "node" command executes the following phases:
@@ -529,90 +589,12 @@ $ sudo systemctl restart kubelet
 And run the test again :
 
 ```
-$ sudo kube-bench run --version 1.32 -c "4.2.1,4.2.2"
-...
-
+$ kube-bench run --targets node -c "4.2.1,4.2.2"
 [INFO] 4 Worker Node Security Configuration
 [INFO] 4.2 Kubelet
 [PASS] 4.2.1 Ensure that the --anonymous-auth argument is set to false (Automated)
 [PASS] 4.2.2 Ensure that the --authorization-mode argument is not set to AlwaysAllow (Automated)
+
 ```
 
 ✅ Test passes.
-
-## 🏁 Final Validation
-
-Ok everything is fine, just for fun, we can run the whole tests :
-
-```
-$ sudo kube-bench run --version 1.32 --noremediations -c "1.1.11,1.2.6,1.2.7,1.2.8,1.2.15,1.2.22,1.2.23,1.2.24,1.3.2,1.4.1,2.1,2.2,4.2.1,4.2.2,4.2.11"
-Warning: Kubernetes version was not auto-detected because kubectl could not connect to the Kubernetes server. This may be because the kubeconfig information is missing or has credentials that do not match the server. Assuming default version 1.18
-[INFO] 1 Control Plane Security Configuration
-[INFO] 1.1 Control Plane Node Configuration Files
-[PASS] 1.1.11 Ensure that the etcd data directory permissions are set to 700 or more restrictive (Automated)
-[INFO] 1.2 API Server
-[PASS] 1.2.6 Ensure that the --authorization-mode argument is not set to AlwaysAllow (Automated)
-[PASS] 1.2.7 Ensure that the --authorization-mode argument includes Node (Automated)
-[PASS] 1.2.8 Ensure that the --authorization-mode argument includes RBAC (Automated)
-[PASS] 1.2.15 Ensure that the --profiling argument is set to false (Automated)
-[PASS] 1.2.22 Ensure that the --service-account-key-file argument is set as appropriate (Automated)
-[PASS] 1.2.23 Ensure that the --etcd-certfile and --etcd-keyfile arguments are set as appropriate (Automated)
-[PASS] 1.2.24 Ensure that the --tls-cert-file and --tls-private-key-file arguments are set as appropriate (Automated)
-[INFO] 1.3 Controller Manager
-[PASS] 1.3.2 Ensure that the --profiling argument is set to false (Automated)
-[INFO] 1.4 Scheduler
-[PASS] 1.4.1 Ensure that the --profiling argument is set to false (Automated)
-
-== Summary master ==
-10 checks PASS
-0 checks FAIL
-0 checks WARN
-0 checks INFO
-
-[INFO] 2 Etcd Node Configuration
-[INFO] 2 Etcd Node Configuration
-[PASS] 2.1 Ensure that the --cert-file and --key-file arguments are set as appropriate (Automated)
-[PASS] 2.2 Ensure that the --client-cert-auth argument is set to true (Automated)
-
-== Summary etcd ==
-2 checks PASS
-0 checks FAIL
-0 checks WARN
-0 checks INFO
-
-[INFO] 3 Control Plane Configuration
-
-== Summary controlplane ==
-0 checks PASS
-0 checks FAIL
-0 checks WARN
-0 checks INFO
-
-[INFO] 4 Worker Node Security Configuration
-[INFO] 4.2 Kubelet
-[PASS] 4.2.1 Ensure that the --anonymous-auth argument is set to false (Automated)
-[PASS] 4.2.2 Ensure that the --authorization-mode argument is not set to AlwaysAllow (Automated)
-[PASS] 4.2.11 Verify that the RotateKubeletServerCertificate argument is set to true (Manual)
-
-== Summary node ==
-3 checks PASS
-0 checks FAIL
-0 checks WARN
-0 checks INFO
-
-[INFO] 5 Kubernetes Policies
-
-== Summary policies ==
-0 checks PASS
-0 checks FAIL
-0 checks WARN
-0 checks INFO
-
-== Summary total ==
-15 checks PASS
-0 checks FAIL
-0 checks WARN
-0 checks INFO
-```
-
-🎉 All tests PASS !

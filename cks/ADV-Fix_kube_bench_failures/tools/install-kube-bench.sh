@@ -13,9 +13,9 @@ cd $TMP_DIR
 curl -sSLO https://github.com/aquasecurity/kube-bench/releases/download/${VERSION}/kube-bench_${VERSION#v}_linux_amd64.tar.gz
 tar -xzf kube-bench_${VERSION#v}_linux_amd64.tar.gz
 
-echo "📂 Installing kube-bench to /usr/local/bin..."
+echo "📦 Installing kube-bench to /usr/local/bin..."
 sudo mv kube-bench /usr/local/bin/
-echo "📂 Installing kube-bench cfg to /etc/kube-bench/cfg ..."
+echo "📦 Installing kube-bench cfg to /etc/kube-bench/cfg ..."
 sudo mkdir /etc/kube-bench/
 sudo mv cfg /etc/kube-bench/
 
