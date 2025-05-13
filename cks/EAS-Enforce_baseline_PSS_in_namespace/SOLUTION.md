@@ -90,7 +90,7 @@ replicaset.apps/hostile-container-8754dcc67   1         0         0       11m
 We can see that there is no pods, and the READY status of the deployment is `0/1`.
 
 
-Then check for events related to the Deployment:
+Then check for `events` related to the Deployment:
 
 ```bash
 $ k get events -n team-blue --sort-by=.lastTimestamp

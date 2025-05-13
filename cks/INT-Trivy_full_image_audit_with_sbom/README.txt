@@ -12,20 +12,20 @@ Learn how to scan, analyze, and secure container images using Trivy CLI with Doc
    - Use the provided `Dockerfile` and demo Python app source code located in `demo-app/`.
 
 2. Scan your image for vulnerabilities:
-   - Use `trivy image` to detect CVEs in both OS packages and application dependencies.
+   - Use `trivy` to detect CVEs in both OS packages and application dependencies.
 
 3. Analyze the scan results:
    - Focus on high and critical vulnerabilities.
    - Identify the vulnerabilities.
 
 4. Improve image security:
-   - Choose a safer base image among the options below:
+   - Choose a safer base image among the options below focusing on CRITICAL & HIGH vulnerabilities:
      - `python:3.9-alpine`: Lightweight, good for small attack surface.
      - `gcr.io/distroless/python3`: No package manager, secure-by-default.
      - `cgr.dev/chainguard/python:latest`: Hardened image using Wolfi, updated frequently.
    - Rebuild your image using Docker with the new base using tag `secure`.
 
-5. Generate a Software Bill of Materials (SBOM):
+5. Generate a Software Bill of Materials (SBOM) of this new demo-app image:
    - Use Trivy to output a CycloneDX formatted SBOM and name it `sbom.json`
 
 6. Generate a security report from the generated SBOM.
