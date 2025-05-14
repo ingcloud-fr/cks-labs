@@ -10,7 +10,7 @@ Enable mutual TLS (mTLS) authentication between microservices using Istio by con
 📌 Your mission:
 
 1. Label the namespace `team-app` to enable automatic sidecar injection.
-2. Redeploy three deployments in this namespace:
+2. Redeploy three deployments in this namespace (the manifests are in `~/manifests`):
    - `httpbin` as a test service (listens on port 8080)
    - `client` as a client (with sidecar) used to curl `httpbin-svc`
    - `naked` as a client (without sidecar) to simulate a failing call

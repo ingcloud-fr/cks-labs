@@ -5,7 +5,7 @@
 ⏱️ Estimated Time: 20 minutes
 
 🎯 Goal:
-Create a CiliumNetworkPolicy that simultaneously controls Ingress and Egress at Layer 4 (TCP ports).
+In the namespace `team-app`, create 2 CiliumNetworkPolicies that controls Ingress and Egress at Layer 4 (TCP ports).
 
 📌 Your mission:
 

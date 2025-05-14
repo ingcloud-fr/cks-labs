@@ -9,7 +9,7 @@ kubectl delete -f manifests/ --ignore-not-found=true > /dev/null 2>&1
 rm -rf ~/manifests > /dev/null
 
 
-echo "🗑️ Deleting Istio Helm releases..."
+echo "🗑️  Deleting Istio Helm releases..."
 helm uninstall istio-ingress -n istio-system >/dev/null 2>&1 || true
 helm uninstall istiod -n istio-system >/dev/null 2>&1 || true
 helm uninstall istio-base -n istio-system >/dev/null 2>&1 || true

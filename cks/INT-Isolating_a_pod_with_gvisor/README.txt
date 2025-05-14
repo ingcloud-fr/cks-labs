@@ -8,7 +8,7 @@ Learn how to isolate container workloads using the gVisor runtime, integrated vi
 
 📌 Your mission:
 1. Create a RuntimeClass named `gvisor` using the proper handler value ('runsc').
-2. Deploy a pod named `pod-gvisor` in the `team-red` namespace using the `ubuntu` image and specify `runtimeClassName: gvisor`.
+2. Deploy a pod named `pod-gvisor` in the `team-red` namespace using the `ubuntu` image and specify the runtime `gvisor`.
 3. Verify that the pod is scheduled correctly and running under the gVisor runtime.
 
 🧰 Context:
