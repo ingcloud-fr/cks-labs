@@ -497,17 +497,34 @@ spec:
 
 ```
 
-- ✔ No volumes aside from default SA token
-- ✔ No elevated privileges
+❌ Issue: Pod is **not immutable**
 
-**Action**: compliant ✅
+Even though the Pod:
 
+* Does **not use `emptyDir` or `hostPath`** volumes (✅ stateless),
+* Does **not run in privileged mode**,
 
+…it still **does not meet immutability standards**.
 
+⚠️ Missing `securityContext` hardening
+
+* `readOnlyRootFilesystem` is **not set** → the container can write to the root filesystem.
+* `allowPrivilegeEscalation` is **not explicitly disabled**.
+* There's **no `runAsNonRoot: true` or `runAsUser` specified**, so it may fall back to root depending on the image.
+
+Even if the official `nginx` image runs as UID 101, this is not guaranteed across variants (like `nginx:alpine`, `nginx:distroless`, etc.).
+
+**Improvement approach**: Patch the Deployment to make it immutable by adding this to the container's `securityContext`:
+
+```yaml
+securityContext:
+  runAsUser: 101
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+```
 
 ### Pod reports-678747bc44-b68dj
-
-
 
 ```yaml 
 $ k -n production get pod/reports-678747bc44-b68dj -oyaml
@@ -582,10 +599,14 @@ spec:
             path: namespace
 ```
 
-- Uses `emptyDir`, **but** mounted in `readOnly: true`
+- ⚠️ Uses `emptyDir` mounted as read-only, but `emptyDir` implies ephemeral state — still considered stateful
 - ✔ No elevated privileges
 
-**Action**: compliant ✅ (even if not ideal, it respects the lab's criteria)
+**Action**: non compliant ❌ 
+
+```
+kubectl delete pod/reports-678747bc44-b68dj -n production
+```
 
 ## 📊 Summary Table
 
@@ -596,8 +617,8 @@ spec:
 | `frontend-emptydir`  | ❌        | ✅        | Delete pod      |
 | `cache`              | ✅        | ✅        | Keep            |
 | `frontend-configmap` | ✅        | ✅        | Keep            |
-| `reports`            | ✅        | ✅        | Keep            |
-| `nginx`              | ✅        | ✅        | Keep            |
+| `reports`            | ❌        | ✅        | Scale to 0      |
+| `nginx`              | ✅        | ❌        | Scale to 0      |
 
 ---
 

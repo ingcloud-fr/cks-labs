@@ -8,7 +8,7 @@ Apply two different custom seccomp profiles that block dangerous syscalls (`unsh
 
 📌 Your mission:
 
-1. Two profiles are placed under `/home/vagrant/profiles/`:
+1. Two profiles are placed under `~/profiles/`:
    - `seccomp-deny-unshare.json`
    - `seccomp-deny-ptrace.json`
 2. Install the 2 seccomp profiles on both `controlplane01` and `node01` (depends on your cluster it might be `k8s-controlplane01` and `k8s-node01`)

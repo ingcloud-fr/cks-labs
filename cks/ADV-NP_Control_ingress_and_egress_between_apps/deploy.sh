@@ -2,7 +2,7 @@
 set -e
 
 echo "🔧 Creating lab resources ..."
-kubectl apply -f manifests/ > /dev/null
+kubectl apply -f manifests/ #> /dev/null
 
 echo
 echo "************************************"

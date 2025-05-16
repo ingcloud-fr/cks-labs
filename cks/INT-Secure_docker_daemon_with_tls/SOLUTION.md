@@ -112,6 +112,12 @@ We edit `/etc/docker/daemon.json`:
 }
 ```
 
+Why `"tlsverify": false` ?
+
+According to the knowledge sources, starting with Docker v27.0, if you configure the daemon to listen on a TCP address (other than tcp://localhost), **TLS verification (i.e., client authentication) is mandatory**. The daemon will fail to start if you set `"tls": true` without "tlsverify": true for remote TCP connections. This means that, for most remote access scenarios, you cannot use TLS without client authentication anymore. **This mode is deprecated and will be removed in v28.0**. For more details, see Unauthenticated TCP connections.
+If you only bind to `tcp://localhost`, you may still be able to use TLS without client authentication, but **this is not recommended for production or remote access**.
+
+
 We restart Docker:
 
 ```bash

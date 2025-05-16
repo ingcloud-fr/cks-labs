@@ -22,8 +22,8 @@ In namespace `team-green`:
 - No egress rules needed (default allow)
 
 🔒 A rule named `frontend-policy`:
-- Allow **egress** to pods with label `app=backend` on port 3000
-- Allow **egress** DNS requests (UDP/53 and TCP/53) to namespace `kube-system`
+- Allow **egress** from frontend to pods backend on port 3000
+- Allow **egress** frontend DNS requests (UDP/53 and TCP/53) to namespace `kube-system`
 - Block all other egress traffic (i.e. frontend can't access internet or other services)
 - No ingress rules needed
 
