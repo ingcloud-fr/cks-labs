@@ -26,8 +26,8 @@ You will create advanced CiliumNetworkPolicies to combine Layer 3 and Layer 4 re
   - A Deployment app-b with label app-b
   - A Deployment app-c with label app-c
 - Each deployment has a service (service-a, service-b, etc)
-- A default-allow CiliumNetworkPolicy is already in place and **must not be changed**
-- All Pods run the image wbitt/network-multitool, exposing port 80
+- A `default-allow` CiliumNetworkPolicy is already in place and **must not be changed**
+- All Pods run the image `wbitt/network-multitool`, exposing port 80
 
 ✅ Expected Result:
 

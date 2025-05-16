@@ -124,7 +124,7 @@ We get the token :
 $ TOKEN=$(cat /run/secrets/kubernetes.io/serviceaccount/token)
 ```
 
-Call the secrets endpoint:
+Call the secrets endpoint using the API reference : https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/secret-v1/#get-read-the-specified-secret
 
 ```sh
 $ curl -sSk -H "Authorization: Bearer $TOKEN" https://kubernetes.default/api/v1/namespaces/team-red/secrets/secret3

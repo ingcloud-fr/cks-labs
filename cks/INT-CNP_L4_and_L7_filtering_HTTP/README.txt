@@ -2,15 +2,15 @@
 
 🧠 Difficulty: Intermediate  
 🧩 Domain : Minimize Microservice Vulnerabilities  
-⏱️ Estimated Time: 15–20 minutes
+⏱️ Estimated Time: 10-15 minutes
 
 🎯 Goal:  
 Leverage Cilium’s L7-aware network policies to restrict HTTP access based on request paths and pod labels.
 
 📌 Your mission:
-1. Deploy Cilium Network Policy named `endpoints-policy` in `team-silver` namespace that :
-- Allow all pods in the namespace to access `/env`.
-- Only allow pods with label `role=admin` to access `/ip`.
+1. Deploy an *Ingress* Cilium Network Policy named `endpoints-policy` in `team-silver` namespace that :
+- Allow all pods in the namespace to access httpbin server with `/env` in HTTP with GET method.
+- Only allow pods admin-tester to access httpbin server with `/ip` in HTTP with GET method.
 2. Deploy another pod `user-tester` (without any label) in the `default` namespace :
 - Modifty the Cilium Network Policy named `endpoints-policy` to allow `/env` but no `/ip`
 

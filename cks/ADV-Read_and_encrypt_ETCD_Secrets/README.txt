@@ -2,7 +2,7 @@
 
 🧠 Difficulty: Advanced  
 🧩 Domain: Cluster Hardening  
-⏱️ Estimated Time: 20 minutes
+⏱️ Estimated Time: 15-20 minutes
 
 🎯 Objective:  
 In this lab, you will explore how Kubernetes Secrets and ConfigMaps are stored in etcd. You will inspect etcd directly, decode secret data, and finally enable encryption at rest for sensitive Kubernetes resources.
