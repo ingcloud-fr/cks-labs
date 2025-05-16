@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+  namespace: team-green
+  labels:
+    app: app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-deployment
+  template:
+    metadata:
+      labels:
+        app: app-deployment
+    spec:
+      containers:
+      - name: busybox
+        image: busybox:1.32.0
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c', 'tail -f /dev/null']
