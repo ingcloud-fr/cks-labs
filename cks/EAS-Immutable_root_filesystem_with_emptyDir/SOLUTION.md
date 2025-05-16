@@ -60,7 +60,7 @@ spec:
 
 4. **Apply changes:**
 
-   Save the modified YAML to `/opt/course/19/immutable-deployment-new.yaml` and redeploy:
+Save the modified YAML to `/opt/course/19/immutable-deployment-new.yaml` and redeploy:
 
 ```
 $ k -n team-green delete deployments.apps app-deployment 
