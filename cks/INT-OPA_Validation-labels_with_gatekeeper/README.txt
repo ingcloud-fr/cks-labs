@@ -3,8 +3,7 @@
 🧠 Difficulty: Intermediate  
 ⏱️ Estimated Time: 15 minutes
 
-🎯 Goal:  
-Learn how to use OPA Gatekeeper's validation capabilities to reject Pods at creation time.
+🎯 Goal: Learn how to use OPA Gatekeeper's validation capabilities to reject Pods at creation time.
 
 📌 Your mission:
 1. Install OPA Gatekeeper using Helm in a namespace `gatekeeper-system` (Helm is already installed).
@@ -25,3 +24,7 @@ Learn how to use OPA Gatekeeper's validation capabilities to reject Pods at crea
 ✅ Expected result:
 - A pod without label `env` created in `team-blue` is automatically rejected.
 - A pod without label `env` created in `team-green` is possible.
+
+📚 Documentation :
+- https://github.com/open-policy-agent/gatekeeper
+- https://www.openpolicyagent.org

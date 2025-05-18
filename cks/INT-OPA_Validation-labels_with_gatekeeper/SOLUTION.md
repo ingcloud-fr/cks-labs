@@ -20,6 +20,18 @@ REVISION: 1
 TEST SUITE: None
 ```
 
+We can see the created webhook :
+
+```
+$ k get validatingwebhookconfigurations.admissionregistration.k8s.io 
+NAME                                          WEBHOOKS   AGE
+gatekeeper-validating-webhook-configuration   2          76s
+
+$ k get mutatingwebhookconfigurations.admissionregistration.k8s.io 
+NAME                                        WEBHOOKS   AGE
+gatekeeper-mutating-webhook-configuration   1 
+```
+
 ## 📐 ConstraintTemplate
 
 The first constraint template in the HOW-TO **remains the same**. 
@@ -38,7 +50,7 @@ spec:
   crd:
     spec:
       names:
-        kind: K8sRequiredLabels
+        kind: K8sRequiredLabels # must match metadata.name
       validation:
         # Schema for the `parameters` field
         openAPIV3Schema:
@@ -82,7 +94,7 @@ spec:
       - apiGroups: [""]
         kinds: ["Pod"] # Change (see api-resource for the kind)
   parameters:
-    labels: ["env"]  # Change
+    labels: ["env"]  # Change to env - must match the type in contraint template : array of string
 ```
 
 💡 To identify the kind of a resource:

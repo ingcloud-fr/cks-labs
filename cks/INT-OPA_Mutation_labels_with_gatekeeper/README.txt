@@ -28,6 +28,8 @@ Learn how to use OPA Gatekeeper's mutation capabilities to inject labels and sec
 - A pod created in `team-purple` has a `seccompProfile.type: RuntimeDefault` field in its securityContext.
 - A pod created in `team-green` remains untouched.
 
-
+📚 Documentation :
+- https://github.com/open-policy-agent/gatekeeper
+- https://www.openpolicyagent.org
 
 🧹 A `reset.sh` script is available to clean the cluster between attempts.
