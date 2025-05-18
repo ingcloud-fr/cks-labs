@@ -169,7 +169,7 @@ We see :
 
 This is the default behavior of the RuntimeDefault seccomp profile: it blocks all syscalls not explicitly allowed.
 
-For information, without *RuntimeDefault* (`RuntimeDefault: false`), we would have :
+For information, without *RuntimeDefault* (ie `RuntimeDefault: false`), we would have :
 
 ```
 $ sudo crictl inspect ffa1c1d4b10ed | jq '.info.runtimeSpec.linux.seccomp'
