@@ -190,7 +190,7 @@ ingress-nginx-controller   NodePort   10.98.156.244   <none>        80:31668/TCP
 
 This IP (`10.98.156.244`) corresponds to the *internal ClusterIP address* of the `ingress-nginx-controller` service.
 
-But it's not directly accessible from the host (since it's an internal cluster IP). You have to use the NodePort with the port `32495` for https (`443:32495/TCP`)
+But it's not directly accessible from the host (since it's an internal cluster IP). You have to use the **NodePort** with the port `32495` for https (`443:32495/TCP`)
 
 We get an IP address :
 

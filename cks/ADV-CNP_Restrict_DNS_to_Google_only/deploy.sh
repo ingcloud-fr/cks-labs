@@ -2,10 +2,7 @@
 set -e
 
 echo "🔧 Creating lab resources ..."
-echo "🔍 Installing tools ..."
-
-tools/install-trivy-cli.sh > /dev/null
-
+kubectl apply -f manifests/ > /dev/null
 
 echo
 echo "************************************"

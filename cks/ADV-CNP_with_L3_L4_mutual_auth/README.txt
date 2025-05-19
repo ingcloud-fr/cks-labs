@@ -15,7 +15,7 @@ You will create advanced CiliumNetworkPolicies to combine Layer 3 and Layer 4 re
 2. Create a Layer 4 deny policy named `deny-icmp-c-to-a`  
    → Deny outgoing **ICMP traffic** from C to A
 
-3. Create a Layer 3 ingress policy with mutual authentication named `require-mtls-a-to-c`  
+3. Create a Layer 3 egress policy with mutual authentication named `require-mtls-a-to-c`  
    → Allow outgoing traffic from A to C **only if mutual authentication is enforced**
 
 🧰 Context:

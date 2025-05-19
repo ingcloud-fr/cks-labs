@@ -12,7 +12,7 @@
 1. Use a specific version of the base image (e.g., python:3.13)
 2. Remove the hardcoded secret from the Dockerfile
 3. Make the secret injectable via an environment variable at runtime
-4. Prevent interactive access to the container using bash
+4. Prevent interactive access to the container using `/bin/bash`
 5. Optimize layers and security
 6. DO NOT ADD/CHANGE THE USER
 

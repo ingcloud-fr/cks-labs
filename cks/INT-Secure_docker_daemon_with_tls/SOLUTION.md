@@ -466,6 +466,14 @@ The `reset.sh` script restores the genuine configuration.
 - Keep `*-key.pem` files private and protected
 - Avoid using `ca-key.pem` outside of your cert generation machine
 - Use short-lived client certs and rotate regularly
+- If you do not need distant access to docker, remove the `"tcp://0.0.0.0:xxxx"` from daemon.json :
+
+```
+{
+  "hosts": ["unix:///var/run/docker.sock"]
+}
+```
+
 
 ---
 

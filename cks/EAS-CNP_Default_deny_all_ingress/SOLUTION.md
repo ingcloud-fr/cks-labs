@@ -39,6 +39,17 @@ spec:
   endpointSelector: {}
   ingress: []
 ```
+
+or :
+
+```yaml
+...
+spec:
+  endpointSelector: {}
+  ingress:
+  - {}
+```
+
 Apply it:
 
 ```

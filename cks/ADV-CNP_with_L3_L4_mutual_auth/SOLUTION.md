@@ -193,7 +193,7 @@ spec:
         family: IPv6
 ```
 
-We apoply it :
+We apply it :
 
 ```
 $ k apply -f deny-icmp-c-to-a.yaml 

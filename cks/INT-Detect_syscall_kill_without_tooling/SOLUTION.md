@@ -96,17 +96,6 @@ We inspect the Pods ID in order to get their pid :
 
 ```
 
-```
-```
-
-```
-```
-
-
-```
-```
-
-
 
 > You should see the command or binary run in that container (in our case: `app`)
 

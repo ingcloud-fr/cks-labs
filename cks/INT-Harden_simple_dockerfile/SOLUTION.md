@@ -60,8 +60,6 @@ else:
 
 ---
 
----
-
 ### 🧪 Test Commands
 
 Build the image:

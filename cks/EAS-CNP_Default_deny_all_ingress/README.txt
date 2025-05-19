@@ -13,7 +13,7 @@ Discover how Cilium Network Policies (CNP) behave by default, and apply a policy
 3. By default, the frontend Pod is able to reach the backend Pod
 4. Apply a CiliumNetworkPolicy named `default-deny-ingress`in the namespace `team-blue` that denies all ingress traffic
 5. Verify that communication between frontend and backend is blocked
-6. Update the CiliumNetworkPolicy to allow only the frontend to access the backend on port 8080
+6. Create another CiliumNetworkPolicy called 'allow-frontend-to-backend' to allow only the frontend to access the backend on port 8080
 
 ✅ Expected result:
 - The frontend Pod cannot access the backend after the default-deny policy is applied

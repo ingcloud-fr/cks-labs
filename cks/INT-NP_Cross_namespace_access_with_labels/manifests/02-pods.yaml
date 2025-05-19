@@ -50,3 +50,18 @@ spec:
   - name: curl
     image: curlimages/curl
     command: ["sleep", "3600"]
+---
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: client-with-access
+  namespace: team-orange
+  labels:
+    access: cross-team
+spec:
+  containers:
+  - name: curl
+    image: curlimages/curl
+    command: ["sleep", "3600"]
+---

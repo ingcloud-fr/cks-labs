@@ -75,7 +75,7 @@ spec:
           role: frontend
     ports:
     - protocol: TCP
-      port: 3000
+      port: "3000"
 ```
 
 ✅ Allows only ingress traffic to `backend` from pods with label `app=frontend`.
@@ -121,16 +121,29 @@ spec:
           app: backend
     ports:
     - protocol: TCP
-      port: 3000
+      port: "3000"
   - to:
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: kube-system
     ports:
     - protocol: UDP
-      port: 53
+      port: "53"
     - protocol: TCP
-      port: 53
+      port: "53"
+```
+
+or :
+
+```yaml
+...
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    ports:
+    - protocol: ANY
+      port: "53"
 ```
 
 
