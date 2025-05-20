@@ -1,6 +1,6 @@
-# 🛡️ CKS Labs
+# 🛡️ Kubernetes Labs
 
-- A series of labs to practice for the CKS.
+- A series of labs to practice Kubernetes (CKS,etc).
 - To be used with the Kubernetes cluster available here: https://github.com/ingcloud-fr/vagrant-virtualbox-kubernetes
 
 ## 🛠️ HowTo
@@ -15,11 +15,11 @@ $ vagrant vagrant halt
 $ vagrant package --output jammy64-updated.box
 $ vagrant box add jammy64-updated jammy64-updated.box 
 ```
-Install a **v1.32** Kuberntes cluster (2 nodes) with *Virtuallbox* (need to be installed) in **Bridge static** mode from *192.168.1.200* (see `vcluster` to change default values) :
+Install a **v1.33** Kuberntes cluster (2 nodes) with *Virtuallbox* (need to be installed) in **Bridge static** mode from *192.168.1.200* (see `vcluster` to change default values) :
 
 ```
 $ cd ..
-$ ./vcluster up
+$ ./vcluster up -n k8s
 ```
 
 ## 🧪 Install the labs 
@@ -27,18 +27,18 @@ $ ./vcluster up
 Install the labs in the `vagrant-virtualbox-kubernetes` directory (normally, you are in)
 
 ```
-$ git clone git@github.com:ingcloud-fr/cks-labs.git
+$ git clone git@github.com:ingcloud-fr/kube-labs.git
 ```
 
-Connect to the controlplan :
+Connect to the controlplane :
 
 ```
-./vcluster k8s-controlplane
+./vcluster ssh k8s-controlplane01
 ```
 Go to the labs throught the shared directory `/vagrant` ::
 
 ```
-$ cd /vagrant/cks-labs
+$ cd /vagrant/kube-labs
 ```
 
 And choose one and launch it :
@@ -49,8 +49,7 @@ $ ./deploy.sh
 ```
 
 Notes : 
-- The labs are formatted like this : TOPIC-LEVEL-Title_of_the_lab
-- For the `TOPIC` : `CS` for *Cluster Setup*, `CH` for *Cluster Hardening*, etc (see below)
+- The labs are formatted like this : LEVEL-Title_of_the_lab
 - For the LEVEL : `BEG` for *Beginner*, `INT` for *Intermediate*, `ADV` for *Advanced*, `EXP` for *Expert*.
 
 Do the labs and check the solution in `SOLUTION.md`
