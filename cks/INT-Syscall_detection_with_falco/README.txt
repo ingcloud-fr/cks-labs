@@ -14,7 +14,7 @@ One of the deployed pods is trying to alter critical system files. Another is in
 3. Modify on both nodes the Falco Rule `Package manager execution detected` to extend log with :
    - the time (without nanoseconds)
    - user_name
-   - the command 
+   - the command line
    - the container id (already existing)
    - the container name 
    - the image_repo
